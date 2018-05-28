@@ -1,0 +1,36 @@
+{
+  "name": "docs",
+  "version": "1.0.0",
+  "description": "A example of project docs using docsify, and a tool to automate implementing project docs.",
+  "main": "docs",
+  "scripts": {
+    "postinstall": "babel-node --presets latest ./configure.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/skan-io/docs.git"
+  },
+  "keywords": [
+    "Documentation",
+    "Docs",
+    "Project",
+    "Docs",
+    "Doc",
+    "tool"
+  ],
+  "author": "Nick Manks",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/skan-io/docs/issues"
+  },
+  "homepage": "https://github.com/skan-io/docs#readme",
+  "dependencies": {
+    "argparse": "^1.0.10",
+    "ascii-art": "^1.4.3",
+    "babel-cli": "^6.26.0",
+    "babel-preset-latest": "^6.24.1",
+    "chalk": "^2.4.1",
+    "npm-run-all": "^4.1.3",
+    "serve": "^6.5.8"
+  }
+}
