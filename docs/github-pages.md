@@ -10,7 +10,7 @@ skan-docs
 
 You will have all the files you need to launch a **github.io** page for your repo inside `/docs`.  Add them to your github repository.
 
-> Note: assumes you have run `git init` and set up your local repository
+> Note: assumes you have run `git init` and set up your local repository.
 
 ```bash
 git add -A

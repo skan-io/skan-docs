@@ -8,7 +8,7 @@ import art from 'ascii-art';
 import path from 'path';
 import fs from 'fs';
 
-const version = '0.0.1';
+const version = '1.0.0';
 
 
 // Command line arguments parser
@@ -204,7 +204,6 @@ async function main() {
     console.log(`${chalk.red(err)}`);
   }
 
-  console.log('');
   console.log(`${chalk.yellow('serve successfully installed.')}`);
 
   console.log('');

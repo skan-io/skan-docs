@@ -4,7 +4,7 @@
 
 ## Background
 
-The _skan-docs_ CLI tool can automate the documentation setup process for your project.  Running _skan-docs_ will download and install docsify-cli, serve and npm-run-all via npm, copy a set of template files into your `docs/` directory and add the `docs:proj`command to your `package.json` so that you can quickly get your project documentation up and running.
+The _skan-docs_ CLI tool can automate the documentation setup process for your project.  Running _skan-docs_ will download and install docsify-cli, serve, remark-lint, remark-cli and npm-run-all via npm, copy a set of template files into your `docs/` directory and add the `docs:proj` and `lint:md` commands to your `package.json` so that you can quickly get your project documentation up and running.
 
 See the [Quick start](quickstart.md) for more details.
 
