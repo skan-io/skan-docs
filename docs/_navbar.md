@@ -1,0 +1,4 @@
+- Translations
+  - [:uk: English](/)
+- Skan.io
+  - [:rocket: Skan.io](https://skan.io)

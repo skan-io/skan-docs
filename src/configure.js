@@ -1,3 +1,6 @@
+#!/usr/bin/env node
+'use strict';
+
 import {exec} from 'child_process';
 import {ArgumentParser} from 'argparse';
 import chalk from 'chalk';
@@ -5,14 +8,14 @@ import art from 'ascii-art';
 import path from 'path';
 import fs from 'fs';
 
-import pkg from './package.json';
+const version = '0.0.1';
 
 
 // Command line arguments parser
 const parser = new ArgumentParser({
-  version: pkg.version,
+  version,
   addHelp: true,
-  description: `A tool to help install doc tools and serve example usage`,
+  description: `A command line tool to help install skan.io doc tools and serve example usage`,
   epilog: `(DEFAULT) Will download docsify-cli, add 'docs:proj', 'docs:proj:serve',
   and docs:proj:build scripts to your project package-lock.json, will start a
   gh-pages branch on your repo at the current HEAD and will tag it with version
@@ -24,7 +27,7 @@ const defaultPath = null;
 const defaultServe = false;
 
 parser.addArgument(
-  ['--package'],
+  ['-p', '--package'],
   {
     help: 'Choose the path to your package.json',
     action: 'store',
@@ -35,7 +38,7 @@ parser.addArgument(
 );
 
 parser.addArgument(
-  ['--serve'],
+  ['-s', '--serve'],
   {
     help: 'Serve your documentation after setup',
     action: 'storeTrue',
@@ -89,7 +92,7 @@ async function updatePackageJson(pkg, path) {
 
       pkg.scripts['docs:proj'] = 'echo \'HELLO WORLD\'';
       pkg.scripts['docs:proj:build'] = 'echo \'HELLO WORLD\'';
-      pkg.scripts['docs:proj:serve'] = 'echo \'HELLO WORLD\'';
+      pkg.scripts['docs:proj:serve'] = 'docsify serve docs';
 
       fs.writeFile(path, JSON.stringify(pkg, null, 2), (err)=> {
         if (err) {
@@ -129,9 +132,14 @@ async function main() {
     ? path.resolve('.', 'package.json')
     : path.resolve(packagePath, 'package.json');
 
-  const pkgJson = require(pkgPath);
+  let pkgJson = null;
 
-  console.log({pkgJson});
+  try {
+    pkgJson = require(pkgPath);
+  } catch (err) {
+    console.log(`${chalk.red(err)}`);
+    return;
+  }
 
   await printHeadingAndArt();
 
