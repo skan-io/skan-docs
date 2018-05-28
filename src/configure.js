@@ -71,7 +71,7 @@ async function printHeadingAndArt() {
   return new Promise(function (resolve, reject) {
     const image = new art.image({
       width : 80,
-  	  filepath: './skan.png',
+  	  filepath: path.join(__dirname, 'skan.png'),
   	  alphabet:'variant4'
     }).font('DOCS.', 'Doom', 'cyan', function(ascii){
   	   console.log(ascii);
@@ -90,9 +90,7 @@ async function updatePackageJson(pkg, path) {
       console.log('');
       console.log(`${chalk.yellow('Adding \'docs:proj\', \'docs:proj:serve\', \'docs:proj:build\' scripts.')}`);
 
-      pkg.scripts['docs:proj'] = 'echo \'HELLO WORLD\'';
-      pkg.scripts['docs:proj:build'] = 'echo \'HELLO WORLD\'';
-      pkg.scripts['docs:proj:serve'] = 'docsify serve docs';
+      pkg.scripts['docs:proj'] = 'docsify serve docs';
 
       fs.writeFile(path, JSON.stringify(pkg, null, 2), (err)=> {
         if (err) {
@@ -120,6 +118,11 @@ async function updatePackageJson(pkg, path) {
     }
   });
 };
+
+
+async function copyFiles() {
+  console.log(__dirname);
+}
 
 
 // Main functionality!
@@ -201,7 +204,27 @@ async function main() {
     console.log(`${chalk.red(err)}`);
   }
 
+  console.log('');
   console.log(`${chalk.yellow('serve successfully installed.')}`);
+
+  console.log('');
+  console.log(`${chalk.yellow('==> Copying template files...')}`);
+
+  await copyFiles();
+
+  if (serveDocs) {
+
+    // TODO: open docs in a new tab ttab maybe?
+
+    console.log('');
+    console.log(`${chalk.green('SUCCESSFULLY INSTALLED PROJECT DOC TEMPLATE!')}`);
+    console.log('');
+    console.log(`${chalk.green('==> Setting up document server...')}`);
+    console.log('');
+  } else {
+    console.log('');
+    console.log(`${chalk.green('SUCCESSFULLY INSTALLED PROJECT DOC TEMPLATE!')}`);
+  }
 };
 
 main();

@@ -1,4 +1,4 @@
-# Quick start
+## Installation
 
 It is recommended to use the npm command `npx` to install _skan-docs_.  In your local repo directory, or in the same directory as your package.json, run:
 
@@ -13,6 +13,8 @@ Or install it globally:
 ```bash
 npm i -g skan-docs
 skan-docs -v
+
+// 1.0.0
 ```
 
 ## Command line arguments

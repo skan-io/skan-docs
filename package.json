@@ -11,7 +11,7 @@
     "make-bin": "mkdir -p bin",
     "build-bin": "babel --presets latest src --out-file bin/skan-docs",
     "mod-bin": "chmod +x bin/skan-docs",
-    "copy-templates": "cp -R ./src/templates/ ./bin/templates",
+    "copy-templates": "cp -R ./src/templates/ ./bin/templates && cp skan.png ./bin",
     "start": "babel-node --presets latest ./configure.js",
     "docs": "docsify serve docs"
   },
