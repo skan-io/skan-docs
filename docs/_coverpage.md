@@ -1,6 +1,6 @@
 <img src='./skan.png' height='150' />
 
-# skan-docs <small>0.0.1</small>
+# skan-docs <small>1.0.0</small>
 
 > A project documentation setup tool.
 

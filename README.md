@@ -1,4 +1,4 @@
-# Skan.io Docs
+# Skan.io skan-docs
 
 Project docs done good. Automated.
 
@@ -6,7 +6,7 @@ A tool written in ES6 to install docsify-cli, npm-run-all and insert `docs:proj`
 
 Also a set of examples and templates to get your project docs going!!
 
-:book: [Checkout Skan.io Docs](https://skan-io.github.io/docs/)
+:book: [Checkout Skan.io skan-docs](https://skan-io.github.io/docs/)
 
 ### Requirements
 
