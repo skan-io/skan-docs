@@ -1,9 +1,8 @@
 * Getting started
 
   * [Quick start](quickstart.md)
+  * [Deploying to github pages](github-pages.md)
   * [Writing more pages](more-pages.md)
-  * [Custom navbar](custom-navbar.md)
-  * [Cover page](cover.md)
 
 * Customization
 

@@ -8,6 +8,27 @@ It is recommended to use the npm command `npx` to install _skan-docs_.  In your 
 npx skan-docs
 ```
 
+Or install it globally:
+
+```bash
+npm i -g skan-docs
+skan-docs -v
+```
+
+## Command line arguments
+
+> **-p , --package**    _Path to package.json_
+
+> **-s , --serve**      _Serve docs after setup_
+
+> **-v**                _Version_
+
+> **-h**                _Help_
+
+```bash
+skan-docs --package 'path/to/package.json' --serve
+```
+
 ## Package scripts
 
 By default _skan-docs_ will add the following scripts to your `package.json`:
@@ -54,8 +75,8 @@ After _skan-docs_ is complete, you can see the template file list in the `./docs
 
 
 1. You will likely want to change the img 'src' at the top of the `_coverpage.md` file to your own logo.
-2. Change all the links and href in all documents to suit your needs
-3. Write some new docs and add them to your `_sidebar.md` file
+2. Change all the links and href in all documents to suit your needs.
+3. Write some new docs and add them to your `_sidebar.md` file.
 
 > Note: `.nojekyll` is required by **github pages**, remove it if you do not plan on hosting your docs on gh-pages.
 
