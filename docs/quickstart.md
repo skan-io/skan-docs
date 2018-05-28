@@ -37,8 +37,10 @@ By default _skan-docs_ will add the following scripts to your `package.json`:
 
 > "docs:proj": "docsify serve docs"
 
+> "lint:md": "remark -i .gitignore --no-stdout --use remark-lint \*.md"
 
-You can easily change this to any script name you like!
+
+You can easily change these to any script name you like!
 
 
 ## Preview your site
@@ -75,12 +77,26 @@ After _skan-docs_ is complete, you can see the template file list in the `./docs
 * `_coverpage.md` as the landing page for your docs
 * `.nojekyll` prevents GitHub Pages from ignoring files that begin with an underscore
 
+> Note: `.nojekyll` is required by **github pages**, remove it if you do not plan on hosting your docs on gh-pages.
 
 1. You will likely want to change the img 'src' at the top of the `_coverpage.md` file to your own logo.
 2. Change all the links and href in all documents to suit your needs.
 3. Write some new docs and add them to your `_sidebar.md` file.
 
-> Note: `.nojekyll` is required by **github pages**, remove it if you do not plan on hosting your docs on gh-pages.
+In your root (`./`) directory, _skan-docs_ will provide a `.remarkrc` config file to lint markdown using the **lint:md** command. See below for more details.
+
+
+## Lint your content
+
+Run:
+
+```bash
+npm run lint:md
+```
+
+This will check all `*.md` files in your directory for errors and report the results to the command line.
+
+> Note: the **lint:md** will use the `.remarkrc` template file provided for configuration.  Remove or update this file to suit your needs.
 
 
 ## Initialize without template
