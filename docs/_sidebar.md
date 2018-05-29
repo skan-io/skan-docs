@@ -11,6 +11,14 @@
 
 * Guide
 
-  * [Embed Files <sup style="color:red">(new)<sup>](embed-files.md)
+  * [Embed Files](embed-files.md)
+
+* Components
+
+  * [React Components<sup style="color:blue">(react)<sup>](COMPONENTS.md)
+
+* Code
+
+  * [Code Documentation<sup style="color:red">(new)<sup>](DOCUMENTATION.md)
 
 * [Changelog](changelog.md)
