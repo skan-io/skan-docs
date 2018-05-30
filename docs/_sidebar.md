@@ -11,7 +11,8 @@
 
 * Guide
 
-  * [Embed Files](embed-files.md)
+  * [Code Docs](code-docs-info.md)
+  * [React Component Docs](code-docs-info.md)
 
 * Components
 

@@ -50,3 +50,61 @@ Parse array of files, and then render the parsed data through the defined layout
 | config.ignore | <code>String</code> | Array of paths to ignore. |
 | config.parser | <code>String</code> | String representing the parser to be used. |
 | config.layout | <code>String</code> | String representing the layout plugin to be used. |
+
+
+
+
+
+## Classes
+
+<dl>
+<dt><a href="#MyClass">MyClass</a></dt>
+<dd><p>[MyClass description]</p>
+</dd>
+</dl>
+
+## Functions
+
+<dl>
+<dt><a href="#sh">sh(cmd)</a> ⇒ <code>Object</code></dt>
+<dd><p>Execute simple shell command (async wrapper).</p>
+</dd>
+<dt><a href="#sh">sh(cmd)</a> ⇒ <code>Object</code></dt>
+<dd><p>Execute simple shell command (async wrapper).</p>
+</dd>
+</dl>
+
+<a name="MyClass"></a>
+
+## MyClass
+[MyClass description]
+
+**Kind**: global class  
+<a name="new_MyClass_new"></a>
+
+### new MyClass()
+[constructor description]
+
+<a name="sh"></a>
+
+## sh(cmd) ⇒ <code>Object</code>
+Execute simple shell command (async wrapper).
+
+**Kind**: global function  
+**Returns**: <code>Object</code> - { stdout: String, stderr: String }  
+
+| Param | Type |
+| --- | --- |
+| cmd | <code>String</code> |
+
+<a name="sh"></a>
+
+## sh(cmd) ⇒ <code>Object</code>
+Execute simple shell command (async wrapper).
+
+**Kind**: global function  
+**Returns**: <code>Object</code> - { stdout: String, stderr: String }  
+
+| Param | Type |
+| --- | --- |
+| cmd | <code>String</code> | 

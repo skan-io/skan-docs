@@ -23,6 +23,10 @@ skan-docs -v
 
 > **-s , --serve**      _Serve docs after setup_
 
+> **--no-react**       _Don't include react component docs_
+
+> **--no-code**        _Don't include code docs
+
 > **-v**                _Version_
 
 > **-h**                _Help_
@@ -36,6 +40,8 @@ skan-docs --package 'path/to/package.json' --serve
 By default _skan-docs_ will add the following scripts to your `package.json`:
 
 > "docs:proj": "docsify serve docs"
+
+> "docs:code": "jsdoc2md '\*\*/\*.js'"
 
 > "lint:md": "remark -i .gitignore --no-stdout --use remark-lint \*.md"
 
