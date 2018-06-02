@@ -20,6 +20,7 @@
 
 * Code
 
+  * [Code Contents](CONTENTS.md)
   * [Code Documentation<sup style="color:red">(new)<sup>](DOCUMENTATION.md)
 
 * [Changelog](changelog.md)

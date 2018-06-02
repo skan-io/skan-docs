@@ -65,7 +65,31 @@ async function sh(cmd) {
   });
 };
 
+/**
+ * [tryLogCommand description]
+ * @param  {asdas} cmd [description]
+ * @return {asdas}     [description]
+ */
+async function tryLogCommand(cmd) {
+  try {
+    let {stdout, stderr} = await sh(cmd);
 
+    for (let line of stderr.split('\n')) {
+      console.log(`${chalk.white(chalk.bold(line))}`);
+    }
+    for (let line of stdout.split('\n')) {
+      console.log(`${chalk.green(line)}`);
+    }
+  } catch (err) {
+    console.log(`${chalk.red(err)}`);
+  }
+};
+
+
+/**
+ * [printHeadingAndArt description]
+ * @return {asdasd} [description]
+ */
 // Print ascii art and Skan.io heading
 async function printHeadingAndArt() {
   return new Promise(function (resolve, reject) {
@@ -81,6 +105,12 @@ async function printHeadingAndArt() {
 };
 
 
+/**
+ * [updatePackageJson description]
+ * @param  {asdasd} pkg  [description]
+ * @param  {assda} path [description]
+ * @return {asdad}      [description]
+ */
 async function updatePackageJson(pkg, path) {
   return new Promise(function (resolve, reject) {
     try {
@@ -88,9 +118,14 @@ async function updatePackageJson(pkg, path) {
         pkg.scripts = {};
       }
       console.log('');
-      console.log(`${chalk.yellow('Adding \'docs:proj\', \'docs:proj:serve\', \'docs:proj:build\' scripts.')}`);
+      console.log(`${chalk.yellow('Adding \'docs:proj\', \'docs:code\', \'docs:*\' scripts.')}`);
 
+      pkg.scripts['docs'] = 'run-s -s docs:code docs:proj';
       pkg.scripts['docs:proj'] = 'docsify serve docs';
+      pkg.scripts['docs:code'] = ``;
+      pkg.scripts['lint'] = 'run-s -s lint:*';
+      pkg.scripts['lint:md'] = 'remark -i .gitignore --no-stdout --use remark-lint *.md';
+      pkg.scripts['lint:docs'] = 'remark -i .gitignore --no-stdout --use remark-lint docs/*.md';
 
       fs.writeFile(path, JSON.stringify(pkg, null, 2), (err)=> {
         if (err) {
@@ -103,16 +138,6 @@ async function updatePackageJson(pkg, path) {
         resolve();
       });
 
-      // TODO uncomment this when ready to remove package.json
-      // fs.unlink(path, (err)=> {
-      //   if (err) {
-      //     reject(err);
-      //   }
-      //
-      //   console.log(`${chalk.yellow(`Removed (outdated) ${path}`)}`);
-      //   console.log('');
-      // });
-
     } catch (err) {
       reject(err);
     }
@@ -120,11 +145,19 @@ async function updatePackageJson(pkg, path) {
 };
 
 
+/**
+ * [copyFiles description]
+ * @return {asdad} [description]
+ */
 async function copyFiles() {
   console.log(__dirname);
 }
 
 
+/**
+ * [main description]
+ * @return {adsasd} [description]
+ */
 // Main functionality!
 async function main() {
   const args = parser.parseArgs(process.argv.slice(2));
@@ -151,35 +184,25 @@ async function main() {
   console.log('');
   console.log(`${chalk.yellow('==> Downloading and installing docsify-cli...')}`);
 
-  try {
-    let {stdout, stderr} = await sh('npm i -g docsify-cli');
-
-    for (let line of stderr.split('\n')) {
-      console.log(`${chalk.white(chalk.bold(line))}`);
-    }
-    for (let line of stdout.split('\n')) {
-      console.log(`${chalk.green(line)}`);
-    }
-  } catch (err) {
-    console.log(`${chalk.red(err)}`);
-  }
+  await tryLogCommand('npm i -g docsify-cli');
 
   console.log(`${chalk.yellow('docsify-cli successfully installed.')}`);
   console.log('');
+  console.log(`${chalk.yellow('==> Downloading and installing jsdoc-to-markdown...')}`);
+
+  await tryLogCommand('npm i -g jsdoc-to-markdown');
+
+  console.log(`${chalk.yellow('jsdoc-to-markdown successfully installed.')}`);
+  console.log('');
+  console.log(`${chalk.yellow('==> Downloading and installing remark-cli and remark-lint...')}`);
+
+  await tryLogCommand('npm i remark-cli remark-lint');
+
+  console.log(`${chalk.yellow('jsdoc-to-markdown successfully installed.')}`);
+  console.log('');
   console.log(`${chalk.yellow('==> Downloading and installing npm-run-all...')}`);
 
-  try {
-    let {stdout, stderr} = await sh('npm i npm-run-all');
-
-    for (let line of stderr.split('\n')) {
-      console.log(`${chalk.white(chalk.bold(line))}`);
-    }
-    for (let line of stdout.split('\n')) {
-      console.log(`${chalk.green(line)}`);
-    }
-  } catch (err) {
-    console.log(`${chalk.red(err)}`);
-  }
+  await tryLogCommand('npm i npm-run-all');
 
   console.log(`${chalk.yellow('npm-run-all successfully installed.')}`);
 
@@ -191,18 +214,7 @@ async function main() {
   console.log('');
   console.log(`${chalk.yellow('==> Downloading and installing serve...')}`);
 
-  try {
-    let {stdout, stderr} = await sh('npm i serve');
-
-    for (let line of stderr.split('\n')) {
-      console.log(`${chalk.white(chalk.bold(line))}`);
-    }
-    for (let line of stdout.split('\n')) {
-      console.log(`${chalk.green(line)}`);
-    }
-  } catch (err) {
-    console.log(`${chalk.red(err)}`);
-  }
+  await tryLogCommand('npm i serve');
 
   console.log(`${chalk.yellow('serve successfully installed.')}`);
 
@@ -216,13 +228,13 @@ async function main() {
     // TODO: open docs in a new tab ttab maybe?
 
     console.log('');
-    console.log(`${chalk.green('SUCCESSFULLY INSTALLED PROJECT DOC TEMPLATE!')}`);
+    console.log(`${chalk.green('Successfully installed project docs template!')}`);
     console.log('');
     console.log(`${chalk.green('==> Setting up document server...')}`);
     console.log('');
   } else {
     console.log('');
-    console.log(`${chalk.green('SUCCESSFULLY INSTALLED PROJECT DOC TEMPLATE!')}`);
+    console.log(`${chalk.green('Successfully installed project docs template!')}`);
   }
 };
 

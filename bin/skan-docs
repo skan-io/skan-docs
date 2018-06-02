@@ -44,14 +44,149 @@ var sh = function () {
   };
 }();
 
-// Print ascii art and Skan.io heading
-var printHeadingAndArt = function () {
-  var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2() {
+/**
+ * [tryLogCommand description]
+ * @param  {asdas} cmd [description]
+ * @return {asdas}     [description]
+ */
+var tryLogCommand = function () {
+  var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(cmd) {
+    var _ref3, stdout, stderr, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, line, _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, _line;
+
     return _regenerator2.default.wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
-            return _context2.abrupt('return', new Promise(function (resolve, reject) {
+            _context2.prev = 0;
+            _context2.next = 3;
+            return sh(cmd);
+
+          case 3:
+            _ref3 = _context2.sent;
+            stdout = _ref3.stdout;
+            stderr = _ref3.stderr;
+            _iteratorNormalCompletion = true;
+            _didIteratorError = false;
+            _iteratorError = undefined;
+            _context2.prev = 9;
+
+
+            for (_iterator = stderr.split('\n')[Symbol.iterator](); !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+              line = _step.value;
+
+              console.log('' + _chalk2.default.white(_chalk2.default.bold(line)));
+            }
+            _context2.next = 17;
+            break;
+
+          case 13:
+            _context2.prev = 13;
+            _context2.t0 = _context2['catch'](9);
+            _didIteratorError = true;
+            _iteratorError = _context2.t0;
+
+          case 17:
+            _context2.prev = 17;
+            _context2.prev = 18;
+
+            if (!_iteratorNormalCompletion && _iterator.return) {
+              _iterator.return();
+            }
+
+          case 20:
+            _context2.prev = 20;
+
+            if (!_didIteratorError) {
+              _context2.next = 23;
+              break;
+            }
+
+            throw _iteratorError;
+
+          case 23:
+            return _context2.finish(20);
+
+          case 24:
+            return _context2.finish(17);
+
+          case 25:
+            _iteratorNormalCompletion2 = true;
+            _didIteratorError2 = false;
+            _iteratorError2 = undefined;
+            _context2.prev = 28;
+            for (_iterator2 = stdout.split('\n')[Symbol.iterator](); !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+              _line = _step2.value;
+
+              console.log('' + _chalk2.default.green(_line));
+            }
+            _context2.next = 36;
+            break;
+
+          case 32:
+            _context2.prev = 32;
+            _context2.t1 = _context2['catch'](28);
+            _didIteratorError2 = true;
+            _iteratorError2 = _context2.t1;
+
+          case 36:
+            _context2.prev = 36;
+            _context2.prev = 37;
+
+            if (!_iteratorNormalCompletion2 && _iterator2.return) {
+              _iterator2.return();
+            }
+
+          case 39:
+            _context2.prev = 39;
+
+            if (!_didIteratorError2) {
+              _context2.next = 42;
+              break;
+            }
+
+            throw _iteratorError2;
+
+          case 42:
+            return _context2.finish(39);
+
+          case 43:
+            return _context2.finish(36);
+
+          case 44:
+            _context2.next = 49;
+            break;
+
+          case 46:
+            _context2.prev = 46;
+            _context2.t2 = _context2['catch'](0);
+
+            console.log('' + _chalk2.default.red(_context2.t2));
+
+          case 49:
+          case 'end':
+            return _context2.stop();
+        }
+      }
+    }, _callee2, this, [[0, 46], [9, 13, 17, 25], [18,, 20, 24], [28, 32, 36, 44], [37,, 39, 43]]);
+  }));
+
+  return function tryLogCommand(_x2) {
+    return _ref2.apply(this, arguments);
+  };
+}();
+
+/**
+ * [printHeadingAndArt description]
+ * @return {asdasd} [description]
+ */
+// Print ascii art and Skan.io heading
+var printHeadingAndArt = function () {
+  var _ref4 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee3() {
+    return _regenerator2.default.wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            return _context3.abrupt('return', new Promise(function (resolve, reject) {
               var image = new _asciiArt2.default.image({
                 width: 80,
                 filepath: _path2.default.join(__dirname, 'skan.png'),
@@ -64,32 +199,43 @@ var printHeadingAndArt = function () {
 
           case 1:
           case 'end':
-            return _context2.stop();
+            return _context3.stop();
         }
       }
-    }, _callee2, this);
+    }, _callee3, this);
   }));
 
   return function printHeadingAndArt() {
-    return _ref2.apply(this, arguments);
+    return _ref4.apply(this, arguments);
   };
 }();
 
+/**
+ * [updatePackageJson description]
+ * @param  {asdasd} pkg  [description]
+ * @param  {assda} path [description]
+ * @return {asdad}      [description]
+ */
 var updatePackageJson = function () {
-  var _ref3 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee3(pkg, path) {
-    return _regenerator2.default.wrap(function _callee3$(_context3) {
+  var _ref5 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee4(pkg, path) {
+    return _regenerator2.default.wrap(function _callee4$(_context4) {
       while (1) {
-        switch (_context3.prev = _context3.next) {
+        switch (_context4.prev = _context4.next) {
           case 0:
-            return _context3.abrupt('return', new Promise(function (resolve, reject) {
+            return _context4.abrupt('return', new Promise(function (resolve, reject) {
               try {
                 if (!pkg.scripts) {
                   pkg.scripts = {};
                 }
                 console.log('');
-                console.log('' + _chalk2.default.yellow('Adding \'docs:proj\', \'docs:proj:serve\', \'docs:proj:build\' scripts.'));
+                console.log('' + _chalk2.default.yellow('Adding \'docs:proj\', \'docs:code\', \'docs:*\' scripts.'));
 
+                pkg.scripts['docs'] = 'run-s -s docs:code docs:proj';
                 pkg.scripts['docs:proj'] = 'docsify serve docs';
+                pkg.scripts['docs:code'] = '';
+                pkg.scripts['lint'] = 'run-s -s lint:*';
+                pkg.scripts['lint:md'] = 'remark -i .gitignore --no-stdout --use remark-lint *.md';
+                pkg.scripts['lint:docs'] = 'remark -i .gitignore --no-stdout --use remark-lint docs/*.md';
 
                 _fs2.default.writeFile(path, JSON.stringify(pkg, null, 2), function (err) {
                   if (err) {
@@ -101,41 +247,10 @@ var updatePackageJson = function () {
 
                   resolve();
                 });
-
-                // TODO uncomment this when ready to remove package.json
-                // fs.unlink(path, (err)=> {
-                //   if (err) {
-                //     reject(err);
-                //   }
-                //
-                //   console.log(`${chalk.yellow(`Removed (outdated) ${path}`)}`);
-                //   console.log('');
-                // });
               } catch (err) {
                 reject(err);
               }
             }));
-
-          case 1:
-          case 'end':
-            return _context3.stop();
-        }
-      }
-    }, _callee3, this);
-  }));
-
-  return function updatePackageJson(_x2, _x3) {
-    return _ref3.apply(this, arguments);
-  };
-}();
-
-var copyFiles = function () {
-  var _ref4 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee4() {
-    return _regenerator2.default.wrap(function _callee4$(_context4) {
-      while (1) {
-        switch (_context4.prev = _context4.next) {
-          case 0:
-            console.log(__dirname);
 
           case 1:
           case 'end':
@@ -145,41 +260,69 @@ var copyFiles = function () {
     }, _callee4, this);
   }));
 
-  return function copyFiles() {
-    return _ref4.apply(this, arguments);
+  return function updatePackageJson(_x3, _x4) {
+    return _ref5.apply(this, arguments);
   };
 }();
 
+/**
+ * [copyFiles description]
+ * @return {asdad} [description]
+ */
+var copyFiles = function () {
+  var _ref6 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee5() {
+    return _regenerator2.default.wrap(function _callee5$(_context5) {
+      while (1) {
+        switch (_context5.prev = _context5.next) {
+          case 0:
+            console.log(__dirname);
+
+          case 1:
+          case 'end':
+            return _context5.stop();
+        }
+      }
+    }, _callee5, this);
+  }));
+
+  return function copyFiles() {
+    return _ref6.apply(this, arguments);
+  };
+}();
+
+/**
+ * [main description]
+ * @return {adsasd} [description]
+ */
 // Main functionality!
 
 
 var main = function () {
-  var _ref5 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee5() {
-    var args, packagePath, serveDocs, pkgPath, pkgJson, _ref6, stdout, stderr, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, line, _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, _line, _ref7, _stdout, _stderr, _iteratorNormalCompletion3, _didIteratorError3, _iteratorError3, _iterator3, _step3, _line2, _iteratorNormalCompletion4, _didIteratorError4, _iteratorError4, _iterator4, _step4, _line3, _ref8, _stdout2, _stderr2, _iteratorNormalCompletion5, _didIteratorError5, _iteratorError5, _iterator5, _step5, _line4, _iteratorNormalCompletion6, _didIteratorError6, _iteratorError6, _iterator6, _step6, _line5;
-
-    return _regenerator2.default.wrap(function _callee5$(_context5) {
+  var _ref7 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee6() {
+    var args, packagePath, serveDocs, pkgPath, pkgJson;
+    return _regenerator2.default.wrap(function _callee6$(_context6) {
       while (1) {
-        switch (_context5.prev = _context5.next) {
+        switch (_context6.prev = _context6.next) {
           case 0:
             args = parser.parseArgs(process.argv.slice(2));
             packagePath = args.packagePath, serveDocs = args.serveDocs;
             pkgPath = packagePath === null ? _path2.default.resolve('.', 'package.json') : _path2.default.resolve(packagePath, 'package.json');
             pkgJson = null;
-            _context5.prev = 4;
+            _context6.prev = 4;
 
             pkgJson = require(pkgPath);
-            _context5.next = 12;
+            _context6.next = 12;
             break;
 
           case 8:
-            _context5.prev = 8;
-            _context5.t0 = _context5['catch'](4);
+            _context6.prev = 8;
+            _context6.t0 = _context6['catch'](4);
 
-            console.log('' + _chalk2.default.red(_context5.t0));
-            return _context5.abrupt('return');
+            console.log('' + _chalk2.default.red(_context6.t0));
+            return _context6.abrupt('return');
 
           case 12:
-            _context5.next = 14;
+            _context6.next = 14;
             return printHeadingAndArt();
 
           case 14:
@@ -189,379 +332,90 @@ var main = function () {
             console.log('');
             console.log('' + _chalk2.default.yellow('==> Downloading and installing docsify-cli...'));
 
-            _context5.prev = 18;
-            _context5.next = 21;
-            return sh('npm i -g docsify-cli');
+            _context6.next = 20;
+            return tryLogCommand('npm i -g docsify-cli');
 
-          case 21:
-            _ref6 = _context5.sent;
-            stdout = _ref6.stdout;
-            stderr = _ref6.stderr;
-            _iteratorNormalCompletion = true;
-            _didIteratorError = false;
-            _iteratorError = undefined;
-            _context5.prev = 27;
-
-
-            for (_iterator = stderr.split('\n')[Symbol.iterator](); !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-              line = _step.value;
-
-              console.log('' + _chalk2.default.white(_chalk2.default.bold(line)));
-            }
-            _context5.next = 35;
-            break;
-
-          case 31:
-            _context5.prev = 31;
-            _context5.t1 = _context5['catch'](27);
-            _didIteratorError = true;
-            _iteratorError = _context5.t1;
-
-          case 35:
-            _context5.prev = 35;
-            _context5.prev = 36;
-
-            if (!_iteratorNormalCompletion && _iterator.return) {
-              _iterator.return();
-            }
-
-          case 38:
-            _context5.prev = 38;
-
-            if (!_didIteratorError) {
-              _context5.next = 41;
-              break;
-            }
-
-            throw _iteratorError;
-
-          case 41:
-            return _context5.finish(38);
-
-          case 42:
-            return _context5.finish(35);
-
-          case 43:
-            _iteratorNormalCompletion2 = true;
-            _didIteratorError2 = false;
-            _iteratorError2 = undefined;
-            _context5.prev = 46;
-            for (_iterator2 = stdout.split('\n')[Symbol.iterator](); !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-              _line = _step2.value;
-
-              console.log('' + _chalk2.default.green(_line));
-            }
-            _context5.next = 54;
-            break;
-
-          case 50:
-            _context5.prev = 50;
-            _context5.t2 = _context5['catch'](46);
-            _didIteratorError2 = true;
-            _iteratorError2 = _context5.t2;
-
-          case 54:
-            _context5.prev = 54;
-            _context5.prev = 55;
-
-            if (!_iteratorNormalCompletion2 && _iterator2.return) {
-              _iterator2.return();
-            }
-
-          case 57:
-            _context5.prev = 57;
-
-            if (!_didIteratorError2) {
-              _context5.next = 60;
-              break;
-            }
-
-            throw _iteratorError2;
-
-          case 60:
-            return _context5.finish(57);
-
-          case 61:
-            return _context5.finish(54);
-
-          case 62:
-            _context5.next = 67;
-            break;
-
-          case 64:
-            _context5.prev = 64;
-            _context5.t3 = _context5['catch'](18);
-
-            console.log('' + _chalk2.default.red(_context5.t3));
-
-          case 67:
+          case 20:
 
             console.log('' + _chalk2.default.yellow('docsify-cli successfully installed.'));
             console.log('');
+            console.log('' + _chalk2.default.yellow('==> Downloading and installing jsdoc-to-markdown...'));
+
+            _context6.next = 25;
+            return tryLogCommand('npm i -g jsdoc-to-markdown');
+
+          case 25:
+
+            console.log('' + _chalk2.default.yellow('jsdoc-to-markdown successfully installed.'));
+            console.log('');
+            console.log('' + _chalk2.default.yellow('==> Downloading and installing remark-cli and remark-lint...'));
+
+            _context6.next = 30;
+            return tryLogCommand('npm i remark-cli remark-lint');
+
+          case 30:
+
+            console.log('' + _chalk2.default.yellow('jsdoc-to-markdown successfully installed.'));
+            console.log('');
             console.log('' + _chalk2.default.yellow('==> Downloading and installing npm-run-all...'));
 
-            _context5.prev = 70;
-            _context5.next = 73;
-            return sh('npm i npm-run-all');
+            _context6.next = 35;
+            return tryLogCommand('npm i npm-run-all');
 
-          case 73:
-            _ref7 = _context5.sent;
-            _stdout = _ref7.stdout;
-            _stderr = _ref7.stderr;
-            _iteratorNormalCompletion3 = true;
-            _didIteratorError3 = false;
-            _iteratorError3 = undefined;
-            _context5.prev = 79;
-
-
-            for (_iterator3 = _stderr.split('\n')[Symbol.iterator](); !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-              _line2 = _step3.value;
-
-              console.log('' + _chalk2.default.white(_chalk2.default.bold(_line2)));
-            }
-            _context5.next = 87;
-            break;
-
-          case 83:
-            _context5.prev = 83;
-            _context5.t4 = _context5['catch'](79);
-            _didIteratorError3 = true;
-            _iteratorError3 = _context5.t4;
-
-          case 87:
-            _context5.prev = 87;
-            _context5.prev = 88;
-
-            if (!_iteratorNormalCompletion3 && _iterator3.return) {
-              _iterator3.return();
-            }
-
-          case 90:
-            _context5.prev = 90;
-
-            if (!_didIteratorError3) {
-              _context5.next = 93;
-              break;
-            }
-
-            throw _iteratorError3;
-
-          case 93:
-            return _context5.finish(90);
-
-          case 94:
-            return _context5.finish(87);
-
-          case 95:
-            _iteratorNormalCompletion4 = true;
-            _didIteratorError4 = false;
-            _iteratorError4 = undefined;
-            _context5.prev = 98;
-            for (_iterator4 = _stdout.split('\n')[Symbol.iterator](); !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-              _line3 = _step4.value;
-
-              console.log('' + _chalk2.default.green(_line3));
-            }
-            _context5.next = 106;
-            break;
-
-          case 102:
-            _context5.prev = 102;
-            _context5.t5 = _context5['catch'](98);
-            _didIteratorError4 = true;
-            _iteratorError4 = _context5.t5;
-
-          case 106:
-            _context5.prev = 106;
-            _context5.prev = 107;
-
-            if (!_iteratorNormalCompletion4 && _iterator4.return) {
-              _iterator4.return();
-            }
-
-          case 109:
-            _context5.prev = 109;
-
-            if (!_didIteratorError4) {
-              _context5.next = 112;
-              break;
-            }
-
-            throw _iteratorError4;
-
-          case 112:
-            return _context5.finish(109);
-
-          case 113:
-            return _context5.finish(106);
-
-          case 114:
-            _context5.next = 119;
-            break;
-
-          case 116:
-            _context5.prev = 116;
-            _context5.t6 = _context5['catch'](70);
-
-            console.log('' + _chalk2.default.red(_context5.t6));
-
-          case 119:
+          case 35:
 
             console.log('' + _chalk2.default.yellow('npm-run-all successfully installed.'));
 
             console.log('');
             console.log('' + _chalk2.default.yellow('==> Updating package.json scripts...'));
 
-            _context5.next = 124;
+            _context6.next = 40;
             return updatePackageJson(pkgJson, pkgPath);
 
-          case 124:
+          case 40:
 
             console.log('');
             console.log('' + _chalk2.default.yellow('==> Downloading and installing serve...'));
 
-            _context5.prev = 126;
-            _context5.next = 129;
-            return sh('npm i serve');
+            _context6.next = 44;
+            return tryLogCommand('npm i serve');
 
-          case 129:
-            _ref8 = _context5.sent;
-            _stdout2 = _ref8.stdout;
-            _stderr2 = _ref8.stderr;
-            _iteratorNormalCompletion5 = true;
-            _didIteratorError5 = false;
-            _iteratorError5 = undefined;
-            _context5.prev = 135;
+          case 44:
 
-
-            for (_iterator5 = _stderr2.split('\n')[Symbol.iterator](); !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-              _line4 = _step5.value;
-
-              console.log('' + _chalk2.default.white(_chalk2.default.bold(_line4)));
-            }
-            _context5.next = 143;
-            break;
-
-          case 139:
-            _context5.prev = 139;
-            _context5.t7 = _context5['catch'](135);
-            _didIteratorError5 = true;
-            _iteratorError5 = _context5.t7;
-
-          case 143:
-            _context5.prev = 143;
-            _context5.prev = 144;
-
-            if (!_iteratorNormalCompletion5 && _iterator5.return) {
-              _iterator5.return();
-            }
-
-          case 146:
-            _context5.prev = 146;
-
-            if (!_didIteratorError5) {
-              _context5.next = 149;
-              break;
-            }
-
-            throw _iteratorError5;
-
-          case 149:
-            return _context5.finish(146);
-
-          case 150:
-            return _context5.finish(143);
-
-          case 151:
-            _iteratorNormalCompletion6 = true;
-            _didIteratorError6 = false;
-            _iteratorError6 = undefined;
-            _context5.prev = 154;
-            for (_iterator6 = _stdout2.split('\n')[Symbol.iterator](); !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
-              _line5 = _step6.value;
-
-              console.log('' + _chalk2.default.green(_line5));
-            }
-            _context5.next = 162;
-            break;
-
-          case 158:
-            _context5.prev = 158;
-            _context5.t8 = _context5['catch'](154);
-            _didIteratorError6 = true;
-            _iteratorError6 = _context5.t8;
-
-          case 162:
-            _context5.prev = 162;
-            _context5.prev = 163;
-
-            if (!_iteratorNormalCompletion6 && _iterator6.return) {
-              _iterator6.return();
-            }
-
-          case 165:
-            _context5.prev = 165;
-
-            if (!_didIteratorError6) {
-              _context5.next = 168;
-              break;
-            }
-
-            throw _iteratorError6;
-
-          case 168:
-            return _context5.finish(165);
-
-          case 169:
-            return _context5.finish(162);
-
-          case 170:
-            _context5.next = 175;
-            break;
-
-          case 172:
-            _context5.prev = 172;
-            _context5.t9 = _context5['catch'](126);
-
-            console.log('' + _chalk2.default.red(_context5.t9));
-
-          case 175:
-
-            console.log('');
             console.log('' + _chalk2.default.yellow('serve successfully installed.'));
 
             console.log('');
             console.log('' + _chalk2.default.yellow('==> Copying template files...'));
 
-            _context5.next = 181;
+            _context6.next = 49;
             return copyFiles();
 
-          case 181:
+          case 49:
 
             if (serveDocs) {
 
               // TODO: open docs in a new tab ttab maybe?
 
               console.log('');
-              console.log('' + _chalk2.default.green('SUCCESSFULLY INSTALLED PROJECT DOC TEMPLATE!'));
+              console.log('' + _chalk2.default.green('Successfully installed project docs template!'));
               console.log('');
               console.log('' + _chalk2.default.green('==> Setting up document server...'));
               console.log('');
             } else {
               console.log('');
-              console.log('' + _chalk2.default.green('SUCCESSFULLY INSTALLED PROJECT DOC TEMPLATE!'));
+              console.log('' + _chalk2.default.green('Successfully installed project docs template!'));
             }
 
-          case 182:
+          case 50:
           case 'end':
-            return _context5.stop();
+            return _context6.stop();
         }
       }
-    }, _callee5, this, [[4, 8], [18, 64], [27, 31, 35, 43], [36,, 38, 42], [46, 50, 54, 62], [55,, 57, 61], [70, 116], [79, 83, 87, 95], [88,, 90, 94], [98, 102, 106, 114], [107,, 109, 113], [126, 172], [135, 139, 143, 151], [144,, 146, 150], [154, 158, 162, 170], [163,, 165, 169]]);
+    }, _callee6, this, [[4, 8]]);
   }));
 
   return function main() {
-    return _ref5.apply(this, arguments);
+    return _ref7.apply(this, arguments);
   };
 }();
 
@@ -587,7 +441,7 @@ var _fs2 = _interopRequireDefault(_fs);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var version = '0.0.1';
+var version = '1.0.0';
 
 // Command line arguments parser
 var parser = new _argparse.ArgumentParser({
@@ -614,10 +468,6 @@ parser.addArgument(['-s', '--serve'], {
   action: 'storeTrue',
   defaultValue: false,
   dest: 'serveDocs'
-});;;
-
-;
-
-;
+});;;;;;
 
 main();
