@@ -10,10 +10,6 @@
  * skan-convert -p ./out -o ./docs
  */
 
-var _turndown = require('turndown');
-
-var _turndown2 = _interopRequireDefault(_turndown);
-
 var _fs = require('fs');
 
 var _fs2 = _interopRequireDefault(_fs);
