@@ -1,12 +1,12 @@
 ## skan-docs
 
-> A project documentation setup tool
+> :books: A project documentation setup tool
 
 ## Background
 
-The _skan-docs_ CLI tool can automate the documentation setup process for your project.  Running _skan-docs_ will download and install docsify-cli, serve, remark-lint, remark-cli, jsdoc, jsdoc plugins, react-styleguidist and npm-run-all via npm, copy a set of template files into your `docs/` directory and add the `docs` and `lint` commands to your `package.json` so that you can quickly get your project documentation up and running.
+The _skan-docs_ CLI tool can automate the documentation setup process for your project.  Running _skan-docs_ will download and install docsify-cli, serve, remark-lint, remark-cli, jsdoc, jsdoc plugins, react-styleguidist and npm-run-all via npm. It will also copy a set of template files into your `docs/` directory and add the `docs` and `lint` commands to your `package.json` so that you can quickly get your project documentation up and running.
 
-See the [Quick start](quickstart.md) for more details.
+See the [Quick start](https://github.com/skan-io/skan-docs/#/quickstart.md) for more details.
 
 ## Features
 
@@ -23,7 +23,7 @@ See the [Quick start](quickstart.md) for more details.
 
 
 ## Docsify
-?> This project is built upon **docsify**. For more information on the project or if you want to extend its functionality have a look at their [documentation](https://docsify.js.org/#/).
+> This project is built upon **docsify**. For more information on the project or if you want to extend its functionality have a look at their [documentation](https://docsify.js.org/#/).
 
 ## Examples
 

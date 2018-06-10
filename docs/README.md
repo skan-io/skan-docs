@@ -1,6 +1,6 @@
 ## skan-docs
 
-> A project documentation setup tool
+> :books: A project documentation setup tool
 
 ## Background
 
