@@ -175,7 +175,7 @@ async function updatePackageJson(pkg, path) {
       pkg.scripts['docs:build'] = 'jsdoc ./src &amp;&amp; ./node_modules/skan-docs/bin/skan-convert -p ./out -o ./docs';
       pkg.scripts['lint'] = 'run-s -s lint:*';
       pkg.scripts['lint:md'] = 'remark -i .gitignore --no-stdout --use remark-lint *.md';
-      pkg.scripts['lint:docs'] = 'remark -i .gitignore --no-stdout --use remark-lint docs/*.md';
+      pkg.scripts['lint:docs'] = 'remark -i .gitignore /docs --no-stdout --use remark-lint docs/*.md';
 
       fs.writeFile(path, JSON.stringify(pkg, null, 2), (err)=> {
         if (err) {

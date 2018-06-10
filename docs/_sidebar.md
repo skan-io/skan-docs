@@ -17,7 +17,7 @@
 
   * [Component Styleguide <sup style="color:blue">(React)<sup>](react_index.html)
 
-* Guide
+* Guides
 
   * [Documenting Code Correctly](code-docs-info.md)
   * [Styling React Components](code-docs-info.md)

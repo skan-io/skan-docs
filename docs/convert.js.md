@@ -5,9 +5,13 @@
 #!/usr/bin/env node
 'use strict';
 
+
 /**
  * Source code for the 'skan-convert' binary
  * @module Convert
+ * @example
+ * // bash shell
+ * skan-convert -p ./out -o ./docs
  */
 
 

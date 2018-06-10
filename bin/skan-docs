@@ -10,11 +10,6 @@
  * skan-docs -p ./src --serve
  */
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.version = undefined;
-
 var _regenerator = require('babel-runtime/regenerator');
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
@@ -255,7 +250,7 @@ var updatePackageJson = function () {
                 pkg.scripts['docs:build'] = 'jsdoc ./src && ./node_modules/skan-docs/bin/skan-convert -p ./out -o ./docs';
                 pkg.scripts['lint'] = 'run-s -s lint:*';
                 pkg.scripts['lint:md'] = 'remark -i .gitignore --no-stdout --use remark-lint *.md';
-                pkg.scripts['lint:docs'] = 'remark -i .gitignore --no-stdout --use remark-lint docs/*.md';
+                pkg.scripts['lint:docs'] = 'remark -i .gitignore /docs --no-stdout --use remark-lint docs/*.md';
 
                 _fs2.default.writeFile(path, JSON.stringify(pkg, null, 2), function (err) {
                   if (err) {
@@ -365,7 +360,7 @@ var main = function () {
             console.log('' + _chalk2.default.yellow('==> Downloading and installing jsdoc-to-markdown...'));
 
             _context6.next = 25;
-            return tryLogCommand('npm i -g jsdoc');
+            return tryLogCommand('npm i -g jsdoc jsdoc-babel');
 
           case 25:
 
@@ -470,7 +465,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @const
  * @type {String}
  */
-var version = exports.version = '1.0.0';
+var version = '1.0.0';
 
 /**
  * Pass the commandline arguments through argparse module.
