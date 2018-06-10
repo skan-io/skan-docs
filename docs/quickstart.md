@@ -4,7 +4,9 @@ It is recommended to use the npm command `npx` to install _skan-docs_.  In your 
 
 > Note: this will require npm > v6
 
+To use _skan-docs_ locally:
 ```bash
+npm i -D skan-docs
 npx skan-docs
 ```
 
