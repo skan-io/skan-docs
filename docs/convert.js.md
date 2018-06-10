@@ -15,7 +15,6 @@
  */
 
 
-import TurndownService from 'turndown';
 import fs from 'fs';
 import path from 'path';
 import {ArgumentParser} from 'argparse';

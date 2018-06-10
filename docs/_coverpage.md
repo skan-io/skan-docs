@@ -2,7 +2,7 @@
 
 # skan-docs <small>1.0.0</small>
 
-> A project documentation setup tool.
+> :books: A project documentation setup tool.
 
 * Simple command line tool
 * Template documentation files included
