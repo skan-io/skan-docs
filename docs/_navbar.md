@@ -2,3 +2,7 @@
   - [:uk: English](/)
 - Skan.io
   - [:rocket: Skan.io](https://skan.io)
+- Home
+  - [:house: Home](/)
+  - [:memo: Code](/code_index.html)
+  - [:electric_plug: React](/react_index.html)

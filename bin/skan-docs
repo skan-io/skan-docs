@@ -2,6 +2,19 @@
 
 'use strict';
 
+/**
+ * Source code for the 'skan-docs' binary
+ * @module Configure
+ * @example
+ * // bash shell
+ * skan-docs -p ./src --serve
+ */
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.version = undefined;
+
 var _regenerator = require('babel-runtime/regenerator');
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
@@ -12,7 +25,8 @@ var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
 /**
  * Execute simple shell command (async wrapper).
- * @param {String} cmd
+ *
+ * @param {String} cmd Shell command to be run (bash)
  * @return {Object} { stdout: String, stderr: String }
  */
 var sh = function () {
@@ -45,9 +59,11 @@ var sh = function () {
 }();
 
 /**
- * [tryLogCommand description]
- * @param  {asdas} cmd [description]
- * @return {asdas}     [description]
+ * Given a shell command, try the command and catch or log
+ * the error or response.
+ *
+ * @param  {String} cmd Shell command to be run (bash)
+ * @return {Void}     Logs errors and stdout
  */
 var tryLogCommand = function () {
   var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(cmd) {
@@ -176,8 +192,9 @@ var tryLogCommand = function () {
 }();
 
 /**
- * [printHeadingAndArt description]
- * @return {asdasd} [description]
+ * Print the skan logo ascii art.
+ *
+ * @return {Void} Ascii art printed to console
  */
 // Print ascii art and Skan.io heading
 var printHeadingAndArt = function () {
@@ -211,10 +228,11 @@ var printHeadingAndArt = function () {
 }();
 
 /**
- * [updatePackageJson description]
- * @param  {asdasd} pkg  [description]
- * @param  {assda} path [description]
- * @return {asdad}      [description]
+ * Add script commands to the passed package json object.
+ *
+ * @param  {Object} pkg  { package.json }
+ * @param  {String} path Path to write updated package.json out to
+ * @return {Promise}     Promise, when resolved has updated package.json
  */
 var updatePackageJson = function () {
   var _ref5 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee4(pkg, path) {
@@ -228,11 +246,13 @@ var updatePackageJson = function () {
                   pkg.scripts = {};
                 }
                 console.log('');
-                console.log('' + _chalk2.default.yellow('Adding \'docs:proj\', \'docs:code\', \'docs:*\' scripts.'));
+                console.log('' + _chalk2.default.yellow('Adding docs and lint scripts to package.json.'));
 
                 pkg.scripts['docs'] = 'run-s -s docs:code docs:proj';
+                pkg.scripts['docs:code'] = 'runs-s docs:clear docs:build docs:clear';
                 pkg.scripts['docs:proj'] = 'docsify serve docs';
-                pkg.scripts['docs:code'] = '';
+                pkg.scripts['docs:clear'] = 'rm -rf ./out/';
+                pkg.scripts['docs:build'] = 'jsdoc ./src && ./node_modules/skan-docs/bin/skan-convert -p ./out -o ./docs';
                 pkg.scripts['lint'] = 'run-s -s lint:*';
                 pkg.scripts['lint:md'] = 'remark -i .gitignore --no-stdout --use remark-lint *.md';
                 pkg.scripts['lint:docs'] = 'remark -i .gitignore --no-stdout --use remark-lint docs/*.md';
@@ -266,8 +286,9 @@ var updatePackageJson = function () {
 }();
 
 /**
- * [copyFiles description]
- * @return {asdad} [description]
+ * Copy template files into the docs directory.
+ *
+ * @return {Void} Templated files copied to docs directory
  */
 var copyFiles = function () {
   var _ref6 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee5() {
@@ -275,6 +296,7 @@ var copyFiles = function () {
       while (1) {
         switch (_context5.prev = _context5.next) {
           case 0:
+            // TODO
             console.log(__dirname);
 
           case 1:
@@ -291,8 +313,9 @@ var copyFiles = function () {
 }();
 
 /**
- * [main description]
- * @return {adsasd} [description]
+ * Entry point.
+ *
+ * @return {Void}
  */
 // Main functionality!
 
@@ -342,7 +365,7 @@ var main = function () {
             console.log('' + _chalk2.default.yellow('==> Downloading and installing jsdoc-to-markdown...'));
 
             _context6.next = 25;
-            return tryLogCommand('npm i -g jsdoc-to-markdown');
+            return tryLogCommand('npm i -g jsdoc');
 
           case 25:
 
@@ -441,14 +464,25 @@ var _fs2 = _interopRequireDefault(_fs);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var version = '1.0.0';
+/**
+ * 'skan-convert' binary version.
+ *
+ * @const
+ * @type {String}
+ */
+var version = exports.version = '1.0.0';
 
-// Command line arguments parser
+/**
+ * Pass the commandline arguments through argparse module.
+ *
+ * @const
+ * @type {ArgumentParser}
+ */
 var parser = new _argparse.ArgumentParser({
   version: version,
   addHelp: true,
   description: 'A command line tool to help install skan.io doc tools and serve example usage',
-  epilog: '(DEFAULT) Will download docsify-cli, add \'docs:proj\', \'docs:proj:serve\',\n  and docs:proj:build scripts to your project package-lock.json, will start a\n  gh-pages branch on your repo at the current HEAD and will tag it with version\n  v0.0.1',
+  epilog: '(DEFAULT) Will download docsify-cli, add \'docs:proj\', \'docs:proj:serve\',\n  and docs:proj:build scripts to your project package-lock.json, will start a\n  gh-pages branch on your repo at the current HEAD and will tag it with version\n  v' + version,
   prog: 'npm start'
 });
 
@@ -462,12 +496,23 @@ parser.addArgument(['-p', '--package'], {
   dest: 'packagePath',
   metavar: '<PATH>'
 });
-
 parser.addArgument(['-s', '--serve'], {
   help: 'Serve your documentation after setup',
   action: 'storeTrue',
   defaultValue: false,
   dest: 'serveDocs'
+});
+parser.addArgument(['--no-code'], {
+  help: 'If true will not set up code docs with jsdoc',
+  action: 'storeTrue',
+  defaultValue: false,
+  dest: 'codeDocs'
+});
+parser.addArgument(['--no-react'], {
+  help: 'If true will not set up react component style guide',
+  action: 'storeTrue',
+  defaultValue: false,
+  dest: 'reactDocs'
 });;;;;;
 
 main();

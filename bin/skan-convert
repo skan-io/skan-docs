@@ -1,0 +1,369 @@
+#!/usr/bin/env node
+
+'use strict';
+
+/**
+ * Source code for the `skan-convert` binary
+ * @module Convert
+ */
+
+var _turndown = require('turndown');
+
+var _turndown2 = _interopRequireDefault(_turndown);
+
+var _fs = require('fs');
+
+var _fs2 = _interopRequireDefault(_fs);
+
+var _path3 = require('path');
+
+var _path4 = _interopRequireDefault(_path3);
+
+var _argparse = require('argparse');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * The splice() method changes the content of a string by removing a range of
+ * characters and/or adding new characters.
+ *
+ * @this {String}
+ * @param {Number} start Index at which to start changing the string.
+ * @param {Number} delCount An integer indicating the number of old chars to remove.
+ * @param {String} newSubStr The String that is spliced in.
+ * @return {String} A new string with the spliced substring.
+ */
+String.prototype.splice = function (start, delCount, newSubStr) {
+  return this.slice(0, start) + newSubStr + this.slice(start + Math.abs(delCount));
+};
+
+/**
+ * 'skan-convert' binary version.
+ * @const
+ * @type {String}
+ */
+var version = '1.0.0';
+
+/**
+ * Pass the commandline arguments through argparse module.
+ *
+ * @const
+ * @type {ArgumentParser}
+ */
+var parser = new _argparse.ArgumentParser({
+  version: version,
+  addHelp: true,
+  description: 'A command line tool to help install skan.io doc tools and serve example usage',
+  epilog: '(DEFAULT) Will download docsify-cli, add \'docs:proj\', \'docs:proj:serve\',\n  and docs:proj:build scripts to your project package-lock.json, will start a\n  gh-pages branch on your repo at the current HEAD and will tag it with version\n  v' + version,
+  prog: 'npm start'
+});
+
+var defaultPath = null;
+
+parser.addArgument(['-p', '--path'], {
+  help: 'The root directory of files to be converted',
+  action: 'store',
+  defaultValue: defaultPath,
+  dest: 'dirname',
+  metavar: '<PATH>'
+});
+parser.addArgument(['-o', '--output'], {
+  help: 'Where to put the converted docs (default = \'./docs\')',
+  action: 'store',
+  defaultValue: defaultPath,
+  dest: 'outdir',
+  metavar: '<PATH>'
+});
+
+var excludedExtensions = new Set(['css', 'scss', 'sass', 'json']);
+var standardFiles = new Set(['_coverpage.md', '_navbar.md', '_sidebar.md', '.nojekyll', 'github-pages.md', 'index.html', 'quickstart.md', 'README.md', 'skan.png', 'jsdoc.json']);
+
+/**
+ * Given a string find all indices where the search string is located.
+ *
+ * @param  {String} searchStr     Subtring to search for
+ * @param  {String} str           String to search within
+ * @param  {Boolean} caseSensitive True if case sensitive
+ * @return {Array}               Array of indicies where search term is
+ *                               in parent string
+ */
+var getIndicesOf = function getIndicesOf(searchStr, str, caseSensitive) {
+  var searchStrLen = searchStr.length;
+  if (searchStrLen == 0) {
+    return [];
+  }
+  var startIndex = 0;
+  var index = null;
+  var indices = [];
+
+  if (!caseSensitive) {
+    str = str.toLowerCase();
+    searchStr = searchStr.toLowerCase();
+  }
+  while ((index = str.indexOf(searchStr, startIndex)) > -1) {
+    indices.push(index);
+    startIndex = index + searchStrLen;
+  }
+  return indices;
+};
+
+/**
+ * Given a string find the next instance of the search string,
+ * from the previous index
+ *
+ * @param  {String} searchStr     Subtring to search for
+ * @param  {String} str           String to search within
+ * @param  {Number} previousIndex Index to start search from
+ * @return {Number}               The next found index of search term
+ */
+var getNextIndexOf = function getNextIndexOf(searchStr, str, previousIndex) {
+  var substring = str.substring(previousIndex);
+  var idx = substring.indexOf(searchStr);
+
+  return idx + previousIndex;
+};
+
+/**
+ * Given a content string find all hrefs and replace the links
+ * with appropriate path for docsify
+ *
+ * @param  {String} content File content as string
+ * @return {String}         New file content as string with updated href
+ *                          paths
+ */
+var updateHrefs = function updateHrefs(content) {
+  var previousIndex = 0;
+  // length of 'href=' string
+  var hlength = 5;
+  var refs = [];
+  var hrefs = getIndicesOf('href=', content);
+
+  for (var i = 0; i < hrefs.length; i += 1) {
+    var index = getNextIndexOf('href=', content, previousIndex) + hlength + 1;
+
+    var remainder = content.substring(index);
+
+    var ref = remainder.split('"', 1);
+
+    var ext = ref[0].split('.').pop();
+
+    if (!excludedExtensions.has(ext)) {
+      var idxHtml = 'index.html';
+      if (ref[0] === idxHtml) {
+        content = content.splice(index, idxHtml.length, '#/code_index.html');
+        previousIndex = index + idxHtml.length;
+      } else {
+        if (ref[0].includes('.js.html')) {
+          var _path = '#/' + ref[0].replace('.js.html', '.js.md');
+          content = content.splice(index, ref[0].length, _path);
+          previousIndex = index + _path.length;
+        } else {
+          var _path2 = '#/' + ref[0];
+          content = content.splice(index, ref[0].length, _path2);
+          previousIndex = index + _path2.length;
+        }
+      }
+    } else {
+      previousIndex = index;
+    }
+  }
+
+  return content;
+};
+
+/**
+ * Given a filename and dirname OR out directory, write the content
+ * to the resolved file on that path
+ *
+ * @param  {String} filename Name of file to be written
+ * @param  {String} content  File content as string
+ * @param  {String} dirname  Path of source file directory
+ * @param  {String} outdir  Path of output directory
+ * @return {Void}
+ */
+var writeContentToDocs = function writeContentToDocs(filename, content, dirname, outdir) {
+  if (!outdir) {
+    var docsPath = _path4.default.join(dirname, 'docs');
+    // Check if the file exists in the current directory.
+    _fs2.default.access(docsPath, _fs2.default.constants.F_OK, function (err) {
+      console.log('' + (err ? 'docs directory does not exist' : 'internal docs folder exists'));
+
+      if (!err) {
+        if (filename === 'index.html') {
+          filename = 'code_index.html';
+        } else if (filename.includes('.js.html')) {
+          filename = filename.replace('.js.html', '.js.md');
+        }
+
+        if (standardFiles.has(filename)) {
+          onError('Cannot override standard file names');
+          return;
+        }
+
+        _fs2.default.writeFile(_path4.default.join(docsPath, filename), content, { encoding: 'utf-8' }, function (err) {
+          if (err) throw err;
+          console.log('The file has been saved!');
+        });
+      }
+    });
+  } else {
+    _fs2.default.access(outdir, _fs2.default.constants.F_OK, function (err) {
+      console.log('' + (err ? 'docs directory does not exist' : 'internal docs folder exists'));
+
+      if (!err) {
+        if (filename === 'index.html') {
+          filename = 'code_index.html';
+        } else if (filename.includes('.js.html')) {
+          filename = filename.replace('.js.html', '.js.md');
+        }
+
+        if (standardFiles.has(filename)) {
+          onError('Cannot override standard file names');
+          return;
+        }
+
+        _fs2.default.writeFile(_path4.default.join(outdir, filename), content, { encoding: 'utf-8' }, function (err) {
+          if (err) throw err;
+          console.log('The file has been saved!');
+        });
+      }
+    });
+  }
+};
+
+/**
+ * Given file content string, convert to markdown format if the
+ * the filename suggests this file is a code block
+ * @param  {String} filename       Name of file
+ * @param  {String} updatedContent File content as string
+ * @return {String}                Updated file content, possibly in
+ *                                 markdown format
+ */
+var convertCodeToMarkdown = function convertCodeToMarkdown(filename, updatedContent) {
+  if (filename.includes('.js.html')) {
+    var file = filename.replace('.html', '');
+
+    var codeStart = updatedContent.split('<code>')[1];
+    var code = codeStart.split('</code>')[0];
+    var navStart = updatedContent.split('<nav>')[1];
+    var nav = navStart.split('</nav>')[0];
+
+    var md = '\n ## ' + file + ' \n \n ```javascript \n' + code + ' ``` \n';
+
+    return md;
+  }
+
+  return updatedContent;
+};
+
+/**
+ * Function called when file data is read by fs
+ *
+ * @callback
+ * @param  {String} filename Name of file
+ * @param  {String} content  File content as string
+ * @param  {String} dirname  Path of source file directory
+ * @return {Void}
+ */
+var onFileContent = function onFileContent(filename, content, dirname, outdir) {
+  var ext = filename.split('.').pop();
+
+  if (ext === 'html') {
+    var updatedContent = updateHrefs(content);
+    var markedContent = convertCodeToMarkdown(filename, updatedContent);
+    writeContentToDocs(filename, markedContent, dirname, outdir);
+  }
+};
+
+/**
+ * Function called when file data is unsuccessfully read
+ *
+ * @callback
+ * @param  {Error} err Error object or string
+ * @return {Void}
+ */
+var onError = function onError(err) {
+  console.log(err);
+};
+
+/**
+ * Given a directory name, read the files in that directory,
+ * process its content and write the updated content to the supplied out
+ * directory
+ *
+ * @param  {String} dirname       Path of source file directory
+ * @param  {Function} onFileContent Callback function to process content
+ * @param  {Function} onError       Callback function to handle error
+ * @param  {String} outdir       Path of output directory
+ * @return {Void}
+ */
+var readFiles = function readFiles(dirname, onFileContent, onError, outdir) {
+  _fs2.default.readdir(dirname, function (err, filenames) {
+    if (err) {
+      onError(err);
+      return;
+    }
+    filenames.forEach(function (filename) {
+      var file = _path4.default.join(dirname, filename);
+      if (_fs2.default.lstatSync(file).isFile()) {
+        _fs2.default.readFile(_path4.default.join(dirname, filename), 'utf-8', function (err, content) {
+          if (err) {
+            onError(err);
+            return;
+          }
+          onFileContent(filename, content, dirname, outdir);
+        });
+      }
+    });
+  });
+};
+
+/**
+ * Remove any doc files from the supplied output directory or the
+ * docs directory which are not in the standardFiles set
+ *
+ * @param  {String} dirname Path to source file directory
+ * @param  {String} outdir  Path to output directory
+ * @param  {Function} onError Callback function to handle errors
+ * @return {Void}
+ */
+var cleanDocs = function cleanDocs(dirname, outdir, onError) {
+  var docsPath = _path4.default.join(dirname, 'docs');
+
+  _fs2.default.readdir(outdir ? outdir : dirname, function (err, filenames) {
+    if (err) {
+      onError(err);
+      return;
+    }
+    filenames.forEach(function (filename) {
+      var file = _path4.default.join(outdir ? outdir : docsPath, filename);
+
+      if (_fs2.default.lstatSync(file).isFile() && !standardFiles.has(filename)) {
+        _fs2.default.unlink(file);
+      }
+    });
+  });
+};
+
+/**
+ * Entry point
+ * @return {Void}
+ */
+function main() {
+  var args = parser.parseArgs(process.argv.slice(2));
+  var dirname = args.dirname,
+      outdir = args.outdir;
+
+
+  cleanDocs(dirname, outdir, onError);
+
+  if (dirname) {
+    readFiles(dirname, onFileContent, onError, outdir);
+  } else {
+    readFiles('.', onFileContent, onError, outdir);
+  }
+
+  return;
+};
+
+main();

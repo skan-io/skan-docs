@@ -20,15 +20,15 @@ skan-docs -v
 ## Command line arguments
 
 > **-p , --package**    _Path to package.json_
-
+>
 > **-s , --serve**      _Serve docs after setup_
-
+>
 > **--no-react**       _Don't include react component docs_
-
-> **--no-code**        _Don't include code docs
-
+>
+> **--no-code**        _Don't include code docs_
+>
 > **-v**                _Version_
-
+>
 > **-h**                _Help_
 
 ```bash
@@ -39,14 +39,24 @@ skan-docs --package 'path/to/package.json' --serve
 
 By default _skan-docs_ will add the following scripts to your `package.json`:
 
-> "docs:proj": "docsify serve docs"
+> **"docs":** "run-s -s docs:code docs:proj"
+>
+> **"docs:code"**: "runs-s docs:clear docs:build docs:clear"
+>
+> **"docs:proj"**: "docsify serve docs"
+>
+> **"docs:clear"**: "rm -rf ./out/"
+>
+> **"docs:build"**: "jsdoc ./src && ./node_modules/skan-docs/bin/skan-convert -p ./out -o ./docs"
+>
+> **"lint"**: "run-s -s lint:\*"
+>
+> **"lint:md"**: "remark -i .gitignore --no-stdout --use remark-lint \*.md"
+>
+> **"lint:docs"**: "remark -i .gitignore --no-stdout --use remark-lint docs/\*.md"
 
-> "docs:code": "jsdoc2md '\*\*/\*.js'"
 
-> "lint:md": "remark -i .gitignore --no-stdout --use remark-lint \*.md"
-
-
-You can easily change these to any script name you like!
+You can easily change these to any script names you like!
 
 
 ## Preview your site
@@ -54,7 +64,7 @@ You can easily change these to any script name you like!
 To run the local server with `npm`:
 
 ```bash
-npm run docs:proj
+npm run docs
 ```
 
 Or you can use the `serve` package which _skan-docs_ installed globally:
@@ -63,11 +73,11 @@ Or you can use the `serve` package which _skan-docs_ installed globally:
 serve ./docs
 ```
 
-You can preview your site in your browser on `http://localhost:3000`.
+You can preview your site in your browser on [`http://localhost:3000`](http://localhost:3000).
 
 You can easily update the documentation in `./docs/README.md` and, of course, you can add [more pages](more-pages.md)!
 
-?> For more use cases of `docsify-cli` used under the hood, see [docsify-cli documentation](https://github.com/QingWei-Li/docsify-cli).
+?> For more use cases of **docsify-cli** used under the hood, see [docsify-cli documentation](https://github.com/QingWei-Li/docsify-cli).
 
 
 ## Writing content
@@ -86,8 +96,9 @@ After _skan-docs_ is complete, you can see the template file list in the `./docs
 > Note: `.nojekyll` is required by **github pages**, remove it if you do not plan on hosting your docs on gh-pages.
 
 1. You will likely want to change the img 'src' at the top of the `_coverpage.md` file to your own logo.
-2. Change all the links and href in all documents to suit your needs.
-3. Write some new docs and add them to your `_sidebar.md` file.
+2. Update your coverpage details on `_coverpage.md`.
+3. Write some new docs and link them to your docs via the `_sidebar.md` file.
+4. Add links to your navbar via the `_navbar.md` file.
 
 In your root (`./`) directory, _skan-docs_ will provide a `.remarkrc` config file to lint markdown using the **lint:md** command. See below for more details.
 
@@ -97,7 +108,7 @@ In your root (`./`) directory, _skan-docs_ will provide a `.remarkrc` config fil
 Run:
 
 ```bash
-npm run lint:md
+npm run lint
 ```
 
 This will check all `*.md` files in your directory for errors and report the results to the command line.

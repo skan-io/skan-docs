@@ -1,3 +1,7 @@
+
+ ## configure.js 
+ 
+ ```javascript 
 #!/usr/bin/env node
 'use strict';
 
@@ -55,7 +59,7 @@ parser.addArgument(
     action: 'store',
     defaultValue: defaultPath,
     dest: 'packagePath',
-    metavar: '<PATH>'
+    metavar: '&lt;PATH>'
   }
 );
 parser.addArgument(
@@ -168,10 +172,10 @@ async function updatePackageJson(pkg, path) {
       pkg.scripts['docs:code'] = 'runs-s docs:clear docs:build docs:clear';
       pkg.scripts['docs:proj'] = 'docsify serve docs';
       pkg.scripts['docs:clear'] = 'rm -rf ./out/';
-      pkg.scripts['docs:build'] = 'jsdoc ./src && ./node_modules/skan-docs/bin/skan-convert -p ./out -o ./docs';
+      pkg.scripts['docs:build'] = 'jsdoc ./src &amp;&amp; ./node_modules/skan-docs/bin/skan-convert -p ./out -o ./docs';
       pkg.scripts['lint'] = 'run-s -s lint:*';
       pkg.scripts['lint:md'] = 'remark -i .gitignore --no-stdout --use remark-lint *.md';
-      pkg.scripts['lint:docs'] = 'remark -i .gitignore /docs --no-stdout --use remark-lint docs/*.md';
+      pkg.scripts['lint:docs'] = 'remark -i .gitignore --no-stdout --use remark-lint docs/*.md';
 
       fs.writeFile(path, JSON.stringify(pkg, null, 2), (err)=> {
         if (err) {
@@ -288,3 +292,4 @@ async function main() {
 };
 
 main();
+ ``` 

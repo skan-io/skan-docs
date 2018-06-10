@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-jsdoc2md src/*.js --template docs/partials/main.hbs --partial docs/partials/shared/signature/sig-link-html.hbs --heading-depth 2 > ./docs/DOCUMENTATION.md
-
-jsdoc2md src/*.js --template docs/partials/main.hbs --partial docs/partials/shared/signature/sig-link-html.hbs --heading-depth 1 > ./docs/CONTENTS.md

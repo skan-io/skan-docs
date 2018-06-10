@@ -9,18 +9,17 @@
   * [Configuration](configuration.md)
   * [Themes](themes.md)
 
-* Guide
-
-  * [Code Docs](code-docs-info.md)
-  * [React Component Docs](code-docs-info.md)
-
-* Components
-
-  * [React Components<sup style="color:blue">(react)<sup>](COMPONENTS.md)
-
 * Code
 
-  * [Code Contents](CONTENTS.md)
-  * [Code Documentation<sup style="color:red">(new)<sup>](DOCUMENTATION.md)
+  * [Code Documentation<sup style="color:red">(JSDoc)<sup>](code_index.html)
+
+* React Components
+
+  * [Component Styleguide <sup style="color:blue">(React)<sup>](react_index.html)
+
+* Guide
+
+  * [Documenting Code Correctly](code-docs-info.md)
+  * [Styling React Components](code-docs-info.md)
 
 * [Changelog](changelog.md)
