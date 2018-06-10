@@ -35,7 +35,7 @@ See the [Quick start](https://skan-io.github.io/skan-docs/#/?id=skan-docs) for m
 
 ## Examples
 
-This repo is built using _skan-docs_.  Check it out [here](/docs/README.md).
+This repo is built using _skan-docs_.  Check it out [here](/docs).
 
 ## Contribute
 
