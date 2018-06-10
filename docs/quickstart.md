@@ -51,9 +51,9 @@ By default _skan-docs_ will add the following scripts to your `package.json`:
 >
 > **"lint"**: "run-s -s lint:\*"
 >
-> **"lint:md"**: "remark -i .gitignore --no-stdout --use remark-lint \*.md"
+> **"lint:md"**: "remark -i docs/\*.md --no-stdout --use remark-lint \*.md"
 >
-> **"lint:docs"**: "remark -i .gitignore --no-stdout --use remark-lint docs/\*.md"
+> **"lint:docs"**: "remark --no-stdout --use remark-lint docs/\*.md"
 
 
 You can easily change these to any script names you like!
@@ -97,8 +97,9 @@ After _skan-docs_ is complete, you can see the template file list in the `./docs
 
 1. You will likely want to change the img 'src' at the top of the `_coverpage.md` file to your own logo.
 2. Update your coverpage details on `_coverpage.md`.
-3. Write some new docs and link them to your docs via the `_sidebar.md` file.
-4. Add links to your navbar via the `_navbar.md` file.
+3. Add links to your navbar via the `_navbar.md` file.
+4. Change the **name** variable passed to the _docsify script_ within `index.html` to your app name.
+5. Write some new docs and link them to your docs via the `_sidebar.md` file.
 
 In your root (`./`) directory, _skan-docs_ will provide a `.remarkrc` config file to lint markdown using the **lint:md** command. See below for more details.
 
@@ -113,7 +114,7 @@ npm run lint
 
 This will check all `*.md` files in your directory for errors and report the results to the command line.
 
-> Note: the **lint:md** will use the `.remarkrc` template file provided for configuration.  Remove or update this file to suit your needs.
+> Note: the **lint** command will use the `.remarkrc` template file provided for configuration.  Remove or update this file to suit your needs.
 
 
 ## Initialize without template

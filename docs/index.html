@@ -13,6 +13,9 @@
     }
   </style>
   <style>
+    pre {
+      width: 100%;
+    }
     .line-number {
         display: grid;
         float: left;
@@ -278,7 +281,7 @@
       maxLevel: 4,
       subMaxLevel: 2,
       ga: 'UA-106147152-1',
-      name: 'docsify',
+      name: 'skan-docs',
       search: {
         noData: {
           '/': 'No results!'
@@ -432,7 +435,7 @@
          var repHash = hash.replace('?id=line', '#line');
          window.location.hash = repHash;
        }
-     }, 50)
+     }, 100);
   });
   </script>
 </body>
