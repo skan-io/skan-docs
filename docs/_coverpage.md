@@ -8,5 +8,5 @@
 * Template documentation files included
 * Package.json script addition
 
-[GitHub](https://github.com/skan-io/docs/)
+[GitHub](https://github.com/skan-io/skan-docs/)
 [Get Started](#skan-docs)
