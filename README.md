@@ -23,7 +23,7 @@ See the [Quick start](https://skan-io.github.io/skan-docs/#/?id=skan-docs) for m
 * React component style guide
 * Write your docs in markdown syntax
 * Scripts automatically added to **package.json**
-* Easily install and push to your `gh-pages` branch
+* Easily install and push to your `github.io` page
 * Customizable navbar, sidebar and cover-page
 * Smart full-text search plugin
 * Emoji support :rocket:
@@ -35,7 +35,7 @@ See the [Quick start](https://skan-io.github.io/skan-docs/#/?id=skan-docs) for m
 
 ## Examples
 
-This repo is built using _skan-docs_.  Check it out [here](https://github.com/skan-io/skan-docs).
+This repo is built using _skan-docs_.  Check it out [here](/docs/README.md).
 
 ## Contribute
 

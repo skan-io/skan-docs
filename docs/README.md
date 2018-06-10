@@ -16,7 +16,7 @@ See the [Quick start](quickstart.md) for more details.
 * React component style guide
 * Write your docs in markdown syntax
 * Scripts automatically added to **package.json**
-* Easily install and push to your `gh-pages` branch
+* Easily install and push to your `github.io` page
 * Customizable navbar, sidebar and cover-page
 * Smart full-text search plugin
 * Emoji support :rocket:
