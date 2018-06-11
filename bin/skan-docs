@@ -283,18 +283,30 @@ var updatePackageJson = function () {
 /**
  * Copy template files into the docs directory.
  *
- * @return {Void} Templated files copied to docs directory
+ * @param  {[type]} packagePath [description]
+ * @return {Void}             Templated files copied to docs directory
  */
 var copyFiles = function () {
-  var _ref6 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee5() {
+  var _ref6 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee5(packagePath) {
+    var docsPath, templatePath;
     return _regenerator2.default.wrap(function _callee5$(_context5) {
       while (1) {
         switch (_context5.prev = _context5.next) {
           case 0:
-            // TODO
-            console.log(__dirname);
+            docsPath = _path2.default.join(packagePath, 'docs');
+            templatePath = _path2.default.join(__dirname, 'templates/');
 
-          case 1:
+
+            console.log(__dirname, docsPath, templatePath);
+            // copy(templatePath, docsPath, (err, files)=> {
+            //   if (err) {
+            //     console.log(err);
+            //   } else {
+            //     console.log({files});
+            //   }
+            // });
+
+          case 3:
           case 'end':
             return _context5.stop();
         }
@@ -302,7 +314,7 @@ var copyFiles = function () {
     }, _callee5, this);
   }));
 
-  return function copyFiles() {
+  return function copyFiles(_x5) {
     return _ref6.apply(this, arguments);
   };
 }();
@@ -317,13 +329,13 @@ var copyFiles = function () {
 
 var main = function () {
   var _ref7 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee6() {
-    var args, packagePath, serveDocs, pkgPath, pkgJson;
+    var args, packagePath, serveDocs, codeDocs, reactDocs, pkgPath, pkgJson;
     return _regenerator2.default.wrap(function _callee6$(_context6) {
       while (1) {
         switch (_context6.prev = _context6.next) {
           case 0:
             args = parser.parseArgs(process.argv.slice(2));
-            packagePath = args.packagePath, serveDocs = args.serveDocs;
+            packagePath = args.packagePath, serveDocs = args.serveDocs, codeDocs = args.codeDocs, reactDocs = args.reactDocs;
             pkgPath = packagePath === null ? _path2.default.resolve('.', 'package.json') : _path2.default.resolve(packagePath, 'package.json');
             pkgJson = null;
             _context6.prev = 4;
@@ -351,16 +363,16 @@ var main = function () {
             console.log('' + _chalk2.default.yellow('==> Downloading and installing docsify-cli...'));
 
             _context6.next = 20;
-            return tryLogCommand('npm i -g docsify-cli');
+            return tryLogCommand('npm i -g docsify-cli && npm i -D docsify-cli');
 
           case 20:
 
             console.log('' + _chalk2.default.yellow('docsify-cli successfully installed.'));
             console.log('');
-            console.log('' + _chalk2.default.yellow('==> Downloading and installing jsdoc-to-markdown...'));
+            console.log('' + _chalk2.default.yellow('==> Downloading and installing jsdoc and jsdoc-babel'));
 
             _context6.next = 25;
-            return tryLogCommand('npm i -g jsdoc jsdoc-babel');
+            return tryLogCommand('npm i -g jsdoc jsdoc-babel && npm i -D jsdoc jsdoc-babel');
 
           case 25:
 
@@ -373,7 +385,7 @@ var main = function () {
 
           case 30:
 
-            console.log('' + _chalk2.default.yellow('jsdoc-to-markdown successfully installed.'));
+            console.log('' + _chalk2.default.yellow('remark-lint and remark-cli successfully installed.'));
             console.log('');
             console.log('' + _chalk2.default.yellow('==> Downloading and installing npm-run-all...'));
 
@@ -396,7 +408,7 @@ var main = function () {
             console.log('' + _chalk2.default.yellow('==> Downloading and installing serve...'));
 
             _context6.next = 44;
-            return tryLogCommand('npm i serve');
+            return tryLogCommand('npm i -D serve && npm i -g serve');
 
           case 44:
 
@@ -406,25 +418,14 @@ var main = function () {
             console.log('' + _chalk2.default.yellow('==> Copying template files...'));
 
             _context6.next = 49;
-            return copyFiles();
+            return copyFiles(packagePath);
 
           case 49:
 
-            if (serveDocs) {
+            console.log('');
+            console.log('' + _chalk2.default.green('Successfully installed project docs template!'));
 
-              // TODO: open docs in a new tab ttab maybe?
-
-              console.log('');
-              console.log('' + _chalk2.default.green('Successfully installed project docs template!'));
-              console.log('');
-              console.log('' + _chalk2.default.green('==> Setting up document server...'));
-              console.log('');
-            } else {
-              console.log('');
-              console.log('' + _chalk2.default.green('Successfully installed project docs template!'));
-            }
-
-          case 50:
+          case 51:
           case 'end':
             return _context6.stop();
         }
@@ -456,6 +457,10 @@ var _path2 = _interopRequireDefault(_path);
 var _fs = require('fs');
 
 var _fs2 = _interopRequireDefault(_fs);
+
+var _copy = require('copy');
+
+var _copy2 = _interopRequireDefault(_copy);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

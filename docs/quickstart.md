@@ -23,8 +23,6 @@ skan-docs -v
 
 > **-p , --package**    _Path to package.json_
 >
-> **-s , --serve**      _Serve docs after setup_
->
 > **--no-react**       _Don't include react component docs_
 >
 > **--no-code**        _Don't include code docs_
@@ -49,7 +47,7 @@ By default _skan-docs_ will add the following scripts to your `package.json`:
 >
 > **"docs:clear"**: "rm -rf ./out/"
 >
-> **"docs:build"**: "jsdoc ./src && ./node_modules/skan-docs/bin/skan-convert -p ./out -o ./docs"
+> **"docs:build"**: "jsdoc ./src && npx skan-convert -p ./out -o ./docs"
 >
 > **"lint"**: "run-s -s lint:\*"
 >

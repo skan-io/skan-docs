@@ -17,6 +17,7 @@ import chalk from 'chalk';
 import art from 'ascii-art';
 import path from 'path';
 import fs from 'fs';
+import copy from 'copy';
 
 
 /**
@@ -25,7 +26,7 @@ import fs from 'fs';
  * @const
  * @type {String}
  */
-const version = '1.0.0';
+const version = '1.0.1';
 
 
 /**
@@ -194,11 +195,21 @@ async function updatePackageJson(pkg, path) {
 /**
  * Copy template files into the docs directory.
  *
- * @return {Void} Templated files copied to docs directory
+ * @param  {String} packagePath Path to package.json directory
+ * @return {Void}             Templated files copied to docs directory
  */
-async function copyFiles() {
-  // TODO
-  console.log(__dirname);
+async function copyFiles(packagePath) {
+  const docsPath = path.join(packagePath, 'docs');
+  const templatePath = path.join(__dirname, 'templates/');
+
+  console.log(__dirname, docsPath, templatePath);
+  // copy(templatePath, docsPath, (err, files)=> {
+  //   if (err) {
+  //     console.log(err);
+  //   } else {
+  //     console.log({files});
+  //   }
+  // });
 }
 
 
@@ -211,7 +222,7 @@ async function copyFiles() {
 async function main() {
   const args = parser.parseArgs(process.argv.slice(2));
 
-  const {packagePath, serveDocs} = args;
+  const {packagePath, serveDocs, codeDocs, reactDocs} = args;
 
   const pkgPath = packagePath === null
     ? path.resolve('.', 'package.json')
@@ -233,13 +244,13 @@ async function main() {
   console.log('');
   console.log(`${chalk.yellow('==> Downloading and installing docsify-cli...')}`);
 
-  await tryLogCommand('npm i -g docsify-cli');
+  await tryLogCommand('npm i -g docsify-cli && npm i -D docsify-cli');
 
   console.log(`${chalk.yellow('docsify-cli successfully installed.')}`);
   console.log('');
-  console.log(`${chalk.yellow('==> Downloading and installing jsdoc-to-markdown...')}`);
+  console.log(`${chalk.yellow('==> Downloading and installing jsdoc and jsdoc-babel')}`);
 
-  await tryLogCommand('npm i -g jsdoc jsdoc-babel');
+  await tryLogCommand('npm i -g jsdoc jsdoc-babel && npm i -D jsdoc jsdoc-babel');
 
   console.log(`${chalk.yellow('jsdoc-to-markdown successfully installed.')}`);
   console.log('');
@@ -247,7 +258,7 @@ async function main() {
 
   await tryLogCommand('npm i remark-cli remark-lint');
 
-  console.log(`${chalk.yellow('jsdoc-to-markdown successfully installed.')}`);
+  console.log(`${chalk.yellow('remark-lint and remark-cli successfully installed.')}`);
   console.log('');
   console.log(`${chalk.yellow('==> Downloading and installing npm-run-all...')}`);
 
@@ -263,28 +274,17 @@ async function main() {
   console.log('');
   console.log(`${chalk.yellow('==> Downloading and installing serve...')}`);
 
-  await tryLogCommand('npm i serve');
+  await tryLogCommand('npm i -D serve && npm i -g serve');
 
   console.log(`${chalk.yellow('serve successfully installed.')}`);
 
   console.log('');
   console.log(`${chalk.yellow('==> Copying template files...')}`);
 
-  await copyFiles();
+  await copyFiles(packagePath);
 
-  if (serveDocs) {
-
-    // TODO: open docs in a new tab ttab maybe?
-
-    console.log('');
-    console.log(`${chalk.green('Successfully installed project docs template!')}`);
-    console.log('');
-    console.log(`${chalk.green('==> Setting up document server...')}`);
-    console.log('');
-  } else {
-    console.log('');
-    console.log(`${chalk.green('Successfully installed project docs template!')}`);
-  }
+  console.log('');
+  console.log(`${chalk.green('Successfully installed project docs template!')}`);
 };
 
 main();
