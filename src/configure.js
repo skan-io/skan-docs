@@ -26,7 +26,7 @@ import copy from 'copy';
  * @const
  * @type {String}
  */
-const version = '1.0.3';
+const version = '1.0.4';
 
 
 /**
