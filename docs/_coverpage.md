@@ -1,6 +1,6 @@
 <img src='./skan.png' height='150' />
 
-# skan-docs <small>1.0.2</small>
+# skan-docs <small>1.0.3</small>
 
 > :books: A project documentation setup tool.
 

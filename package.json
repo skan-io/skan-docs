@@ -1,6 +1,6 @@
 {
   "name": "skan-docs",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A example of project docs using docsify, and a tool to automate implementing project docs.",
   "main": "skan-docs",
   "bin": {
@@ -23,7 +23,8 @@
     "start": "babel-node --presets latest ./configure.js",
     "docs": "run-s -s docs:code docs:proj",
     "docs:code": "rm -rf ./out/ && jsdoc ./src && ./bin/skan-convert -p ./out -o ./docs && rm -rf ./out/",
-    "docs:proj": "docsify serve docs"
+    "docs:proj": "docsify serve docs",
+    "postinstall": "run-s -s build"
   },
   "repository": {
     "type": "git",

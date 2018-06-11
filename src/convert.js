@@ -36,7 +36,7 @@ String.prototype.splice = function(start, delCount, newSubStr) {
  * @const
  * @type {String}
  */
-const version = '1.0.1';
+const version = '1.0.3';
 
 
 /**
