@@ -66,4 +66,7 @@ typings/
 # Serverless directories
 .serverless
 
+# Ignore binaries
+bin/
+
 .DS_Store

@@ -1,4 +1,0 @@
-- Translations
-  - [:uk: English](/)
-- YourApp.io
-  - [:rocket: YourApp.io](https://your-app.io)
