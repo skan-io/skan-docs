@@ -169,7 +169,7 @@ async function updatePackageJson(pkg, path) {
       pkg.scripts['docs:code'] = 'run-s docs:clear docs:build docs:clear';
       pkg.scripts['docs:proj'] = 'docsify serve docs';
       pkg.scripts['docs:clear'] = 'rm -rf ./out/';
-      pkg.scripts['docs:build'] = 'jsdoc ./src || exit 0 && ./node_modules/skan-docs/bin/skan-convert -p ./out -o ./docs || exit 0';
+      pkg.scripts['docs:build'] = 'jsdoc ./src || exit 0 && skan-convert -p ./out -o ./docs || exit 0';
       pkg.scripts['lint'] = 'run-s -s lint:*';
       pkg.scripts['lint:md'] = 'remark -i .gitignore --no-stdout --use remark-lint *.md';
       pkg.scripts['lint:docs'] = 'remark -i .gitignore /docs --no-stdout --use remark-lint docs/*.md';
