@@ -166,10 +166,10 @@ async function updatePackageJson(pkg, path) {
       console.log(`${chalk.yellow('Adding docs and lint scripts to package.json.')}`);
 
       pkg.scripts['docs'] = 'run-s -s docs:code docs:proj';
-      pkg.scripts['docs:code'] = 'runs-s docs:clear docs:build docs:clear';
+      pkg.scripts['docs:code'] = 'run-s docs:clear docs:build docs:clear';
       pkg.scripts['docs:proj'] = 'docsify serve docs';
       pkg.scripts['docs:clear'] = 'rm -rf ./out/';
-      pkg.scripts['docs:build'] = 'jsdoc ./src && ./node_modules/skan-docs/bin/skan-convert -p ./out -o ./docs';
+      pkg.scripts['docs:build'] = 'jsdoc ./src || exit 0 && ./node_modules/skan-docs/bin/skan-convert -p ./out -o ./docs || exit 0';
       pkg.scripts['lint'] = 'run-s -s lint:*';
       pkg.scripts['lint:md'] = 'remark -i .gitignore --no-stdout --use remark-lint *.md';
       pkg.scripts['lint:docs'] = 'remark -i .gitignore /docs --no-stdout --use remark-lint docs/*.md';
@@ -199,17 +199,14 @@ async function updatePackageJson(pkg, path) {
  * @return {Void}             Templated files copied to docs directory
  */
 async function copyFiles(packagePath) {
-  const docsPath = path.join(packagePath, 'docs');
-  const templatePath = path.join(__dirname, 'templates/');
+  const docsPath = path.join(path.dirname(packagePath), 'docs');
+  const templatePath = path.join(__dirname, 'templates/*.*');
 
-  console.log(__dirname, docsPath, templatePath);
-  // copy(templatePath, docsPath, (err, files)=> {
-  //   if (err) {
-  //     console.log(err);
-  //   } else {
-  //     console.log({files});
-  //   }
-  // });
+  copy(templatePath, docsPath, (err, files)=> {
+    if (err) {
+      console.log(err);
+    }
+  });
 }
 
 
@@ -228,6 +225,8 @@ async function main() {
     ? path.resolve('.', 'package.json')
     : path.resolve(packagePath, 'package.json');
 
+  console.log({pkgPath});
+
   let pkgJson = null;
 
   try {
@@ -242,17 +241,28 @@ async function main() {
   console.log('');
   console.log(`${chalk.yellow('Welcome to Skan.io doctool.')}`);
   console.log('');
+  console.log(`${chalk.yellow('==> Updating package.json scripts...')}`);
+
+  await updatePackageJson(pkgJson, pkgPath);
+
+  console.log('');
   console.log(`${chalk.yellow('==> Downloading and installing docsify-cli...')}`);
 
   await tryLogCommand('npm i -g docsify-cli && npm i -D docsify-cli');
 
   console.log(`${chalk.yellow('docsify-cli successfully installed.')}`);
   console.log('');
+  console.log(`${chalk.yellow('==> Downloading and installing babel-core and babel-cli')}`);
+
+  await tryLogCommand('npm i babel-core babel-cli');
+
+  console.log(`${chalk.yellow('babel successfully installed.')}`);
+  console.log('');
   console.log(`${chalk.yellow('==> Downloading and installing jsdoc and jsdoc-babel')}`);
 
   await tryLogCommand('npm i -g jsdoc jsdoc-babel && npm i -D jsdoc jsdoc-babel');
 
-  console.log(`${chalk.yellow('jsdoc-to-markdown successfully installed.')}`);
+  console.log(`${chalk.yellow('jsdoc successfully installed.')}`);
   console.log('');
   console.log(`${chalk.yellow('==> Downloading and installing remark-cli and remark-lint...')}`);
 
@@ -267,11 +277,6 @@ async function main() {
   console.log(`${chalk.yellow('npm-run-all successfully installed.')}`);
 
   console.log('');
-  console.log(`${chalk.yellow('==> Updating package.json scripts...')}`);
-
-  await updatePackageJson(pkgJson, pkgPath);
-
-  console.log('');
   console.log(`${chalk.yellow('==> Downloading and installing serve...')}`);
 
   await tryLogCommand('npm i -D serve && npm i -g serve');
@@ -281,7 +286,7 @@ async function main() {
   console.log('');
   console.log(`${chalk.yellow('==> Copying template files...')}`);
 
-  await copyFiles(packagePath);
+  await copyFiles(pkgPath);
 
   console.log('');
   console.log(`${chalk.green('Successfully installed project docs template!')}`);

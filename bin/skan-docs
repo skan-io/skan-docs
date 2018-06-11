@@ -293,18 +293,15 @@ var copyFiles = function () {
       while (1) {
         switch (_context5.prev = _context5.next) {
           case 0:
-            docsPath = _path2.default.join(packagePath, 'docs');
-            templatePath = _path2.default.join(__dirname, 'templates/');
+            docsPath = _path2.default.join(_path2.default.dirname(packagePath), 'docs');
+            templatePath = _path2.default.join(__dirname, 'templates/*.*');
 
 
-            console.log(__dirname, docsPath, templatePath);
-            // copy(templatePath, docsPath, (err, files)=> {
-            //   if (err) {
-            //     console.log(err);
-            //   } else {
-            //     console.log({files});
-            //   }
-            // });
+            (0, _copy2.default)(templatePath, docsPath, function (err, files) {
+              if (err) {
+                console.log(err);
+              }
+            });
 
           case 3:
           case 'end':
@@ -337,100 +334,113 @@ var main = function () {
             args = parser.parseArgs(process.argv.slice(2));
             packagePath = args.packagePath, serveDocs = args.serveDocs, codeDocs = args.codeDocs, reactDocs = args.reactDocs;
             pkgPath = packagePath === null ? _path2.default.resolve('.', 'package.json') : _path2.default.resolve(packagePath, 'package.json');
+
+
+            console.log({ pkgPath: pkgPath });
+
             pkgJson = null;
-            _context6.prev = 4;
+            _context6.prev = 5;
 
             pkgJson = require(pkgPath);
-            _context6.next = 12;
+            _context6.next = 13;
             break;
 
-          case 8:
-            _context6.prev = 8;
-            _context6.t0 = _context6['catch'](4);
+          case 9:
+            _context6.prev = 9;
+            _context6.t0 = _context6['catch'](5);
 
             console.log('' + _chalk2.default.red(_context6.t0));
             return _context6.abrupt('return');
 
-          case 12:
-            _context6.next = 14;
+          case 13:
+            _context6.next = 15;
             return printHeadingAndArt();
 
-          case 14:
+          case 15:
 
             console.log('');
             console.log('' + _chalk2.default.yellow('Welcome to Skan.io doctool.'));
             console.log('');
+            console.log('' + _chalk2.default.yellow('==> Updating package.json scripts...'));
+
+            _context6.next = 21;
+            return updatePackageJson(pkgJson, pkgPath);
+
+          case 21:
+
+            console.log('');
             console.log('' + _chalk2.default.yellow('==> Downloading and installing docsify-cli...'));
 
-            _context6.next = 20;
-            return tryLogCommand('npm i -g docsify-cli && npm i -D docsify-cli');
-
-          case 20:
-
-            console.log('' + _chalk2.default.yellow('docsify-cli successfully installed.'));
-            console.log('');
-            console.log('' + _chalk2.default.yellow('==> Downloading and installing jsdoc and jsdoc-babel'));
-
             _context6.next = 25;
-            return tryLogCommand('npm i -g jsdoc jsdoc-babel && npm i -D jsdoc jsdoc-babel');
+            return tryLogCommand('npm i -g docsify-cli && npm i -D docsify-cli');
 
           case 25:
 
-            console.log('' + _chalk2.default.yellow('jsdoc-to-markdown successfully installed.'));
+            console.log('' + _chalk2.default.yellow('docsify-cli successfully installed.'));
+            console.log('');
+            console.log('' + _chalk2.default.yellow('==> Downloading and installing babel-core and babel-cli'));
+
+            _context6.next = 30;
+            return tryLogCommand('npm i babel-core babel-cli');
+
+          case 30:
+
+            console.log('' + _chalk2.default.yellow('babel successfully installed.'));
+            console.log('');
+            console.log('' + _chalk2.default.yellow('==> Downloading and installing jsdoc and jsdoc-babel'));
+
+            _context6.next = 35;
+            return tryLogCommand('npm i -g jsdoc jsdoc-babel && npm i -D jsdoc jsdoc-babel');
+
+          case 35:
+
+            console.log('' + _chalk2.default.yellow('jsdoc successfully installed.'));
             console.log('');
             console.log('' + _chalk2.default.yellow('==> Downloading and installing remark-cli and remark-lint...'));
 
-            _context6.next = 30;
+            _context6.next = 40;
             return tryLogCommand('npm i remark-cli remark-lint');
 
-          case 30:
+          case 40:
 
             console.log('' + _chalk2.default.yellow('remark-lint and remark-cli successfully installed.'));
             console.log('');
             console.log('' + _chalk2.default.yellow('==> Downloading and installing npm-run-all...'));
 
-            _context6.next = 35;
+            _context6.next = 45;
             return tryLogCommand('npm i npm-run-all');
 
-          case 35:
+          case 45:
 
             console.log('' + _chalk2.default.yellow('npm-run-all successfully installed.'));
 
             console.log('');
-            console.log('' + _chalk2.default.yellow('==> Updating package.json scripts...'));
-
-            _context6.next = 40;
-            return updatePackageJson(pkgJson, pkgPath);
-
-          case 40:
-
-            console.log('');
             console.log('' + _chalk2.default.yellow('==> Downloading and installing serve...'));
 
-            _context6.next = 44;
+            _context6.next = 50;
             return tryLogCommand('npm i -D serve && npm i -g serve');
 
-          case 44:
+          case 50:
 
             console.log('' + _chalk2.default.yellow('serve successfully installed.'));
 
             console.log('');
             console.log('' + _chalk2.default.yellow('==> Copying template files...'));
 
-            _context6.next = 49;
-            return copyFiles(packagePath);
+            _context6.next = 55;
+            return copyFiles(pkgPath);
 
-          case 49:
+          case 55:
 
             console.log('');
             console.log('' + _chalk2.default.green('Successfully installed project docs template!'));
 
-          case 51:
+          case 57:
           case 'end':
             return _context6.stop();
         }
       }
-    }, _callee6, this, [[4, 8]]);
+    }, _callee6, this, [[5, 9]]);
   }));
 
   return function main() {
@@ -470,7 +480,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @const
  * @type {String}
  */
-var version = '1.0.5';
+var version = '1.0.6';
 
 /**
  * Pass the commandline arguments through argparse module.

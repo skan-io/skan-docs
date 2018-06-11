@@ -41,7 +41,7 @@ String.prototype.splice = function (start, delCount, newSubStr) {
  * @const
  * @type {String}
  */
-var version = '1.0.5';
+var version = '1.0.6';
 
 /**
  * Pass the commandline arguments through argparse module.
