@@ -384,7 +384,7 @@ const cleanDocs = (dirname, outdir, onError, files)=> {
       return;
     }
     filenames.forEach((filename)=> {
-      if (!files.has(filename)) {
+      if (files.has(filename)) {
         const file = path.join(outdir ? outdir : docsPath, filename);
 
         if (fs.lstatSync(file).isFile() && !standardFiles.has(filename)) {
