@@ -229,8 +229,17 @@ var printHeadingAndArt = function () {
  * @param  {String} path Path to write updated package.json out to
  * @return {Promise}     Promise, when resolved has updated package.json
  */
+
+/**
+ * Add script commands to the passed package json object.
+ * @param  {Object} pkg  { package.json }
+ * @param  {String} path Path to write updated package.json out to
+ * @param  {Boolean} codeDocs  True if include code docs scripts
+ * @param  {Boolean} reactDocs True if include react style guide scripts
+ * @return {Promise}     Promise, when resolved has updated package.json
+ */
 var updatePackageJson = function () {
-  var _ref5 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee4(pkg, path) {
+  var _ref5 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee4(pkg, path, codeDocs, reactDocs) {
     return _regenerator2.default.wrap(function _callee4$(_context4) {
       while (1) {
         switch (_context4.prev = _context4.next) {
@@ -243,14 +252,26 @@ var updatePackageJson = function () {
                 console.log('');
                 console.log('' + _chalk2.default.yellow('Adding docs and lint scripts to package.json.'));
 
-                pkg.scripts['docs'] = 'run-s -s docs:code docs:proj';
-                pkg.scripts['docs:code'] = 'runs-s docs:clear docs:build docs:clear';
-                pkg.scripts['docs:proj'] = 'docsify serve docs';
-                pkg.scripts['docs:clear'] = 'rm -rf ./out/';
-                pkg.scripts['docs:build'] = 'jsdoc ./src && ./node_modules/skan-docs/bin/skan-convert -p ./out -o ./docs';
-                pkg.scripts['lint'] = 'run-s -s lint:*';
-                pkg.scripts['lint:md'] = 'remark -i .gitignore --no-stdout --use remark-lint *.md';
-                pkg.scripts['lint:docs'] = 'remark -i .gitignore /docs --no-stdout --use remark-lint docs/*.md';
+                if (codeDocs && reactDocs) {
+                  pkg.scripts['docs'] = 'run-s -s docs:code docs:proj';
+                  pkg.scripts['docs:code'] = 'run-s docs:clear docs:build docs:clear';
+                  pkg.scripts['docs:proj'] = 'docsify serve docs';
+                  pkg.scripts['docs:clear'] = 'rm -rf ./out/';
+                  pkg.scripts['docs:build'] = 'jsdoc ./src || exit 0 && skan-convert -p ./out -o ./docs || exit 0';
+                  pkg.scripts['lint'] = 'run-s -s lint:*';
+                  pkg.scripts['lint:md'] = 'remark -i .gitignore --no-stdout --use remark-lint *.md';
+                  pkg.scripts['lint:docs'] = 'remark -i .gitignore /docs --no-stdout --use remark-lint docs/*.md';
+
+                  // TODO add react style guide scripts
+                } else if (!codeDocs) {
+                  pkg.scripts['docs'] = 'run-s -s docs:proj';
+                  pkg.scripts['docs:proj'] = 'docsify serve docs';
+                  pkg.scripts['lint'] = 'run-s -s lint:*';
+                  pkg.scripts['lint:md'] = 'remark -i .gitignore --no-stdout --use remark-lint *.md';
+                  pkg.scripts['lint:docs'] = 'remark -i .gitignore /docs --no-stdout --use remark-lint docs/*.md';
+
+                  // TODO add react style guide scripts
+                }
 
                 _fs2.default.writeFile(path, JSON.stringify(pkg, null, 2), function (err) {
                   if (err) {
@@ -275,7 +296,7 @@ var updatePackageJson = function () {
     }, _callee4, this);
   }));
 
-  return function updatePackageJson(_x3, _x4) {
+  return function updatePackageJson(_x3, _x4, _x5, _x6) {
     return _ref5.apply(this, arguments);
   };
 }();
@@ -311,7 +332,7 @@ var copyFiles = function () {
     }, _callee5, this);
   }));
 
-  return function copyFiles(_x5) {
+  return function copyFiles(_x7) {
     return _ref6.apply(this, arguments);
   };
 }();
@@ -326,13 +347,13 @@ var copyFiles = function () {
 
 var main = function () {
   var _ref7 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee6() {
-    var args, packagePath, serveDocs, codeDocs, reactDocs, pkgPath, pkgJson;
+    var args, packagePath, codeDocs, reactDocs, pkgPath, pkgJson;
     return _regenerator2.default.wrap(function _callee6$(_context6) {
       while (1) {
         switch (_context6.prev = _context6.next) {
           case 0:
             args = parser.parseArgs(process.argv.slice(2));
-            packagePath = args.packagePath, serveDocs = args.serveDocs, codeDocs = args.codeDocs, reactDocs = args.reactDocs;
+            packagePath = args.packagePath, codeDocs = args.codeDocs, reactDocs = args.reactDocs;
             pkgPath = packagePath === null ? _path2.default.resolve('.', 'package.json') : _path2.default.resolve(packagePath, 'package.json');
 
 
@@ -364,7 +385,7 @@ var main = function () {
             console.log('' + _chalk2.default.yellow('==> Updating package.json scripts...'));
 
             _context6.next = 21;
-            return updatePackageJson(pkgJson, pkgPath);
+            return updatePackageJson(pkgJson, pkgPath, codeDocs, reactDocs);
 
           case 21:
 
@@ -377,65 +398,74 @@ var main = function () {
           case 25:
 
             console.log('' + _chalk2.default.yellow('docsify-cli successfully installed.'));
+
+            if (!codeDocs) {
+              _context6.next = 37;
+              break;
+            }
+
             console.log('');
             console.log('' + _chalk2.default.yellow('==> Downloading and installing babel-core and babel-cli'));
 
-            _context6.next = 30;
+            _context6.next = 31;
             return tryLogCommand('npm i babel-core babel-cli');
 
-          case 30:
+          case 31:
 
             console.log('' + _chalk2.default.yellow('babel successfully installed.'));
             console.log('');
             console.log('' + _chalk2.default.yellow('==> Downloading and installing jsdoc and jsdoc-babel'));
 
-            _context6.next = 35;
+            _context6.next = 36;
             return tryLogCommand('npm i -g jsdoc jsdoc-babel && npm i -D jsdoc jsdoc-babel');
 
-          case 35:
+          case 36:
 
             console.log('' + _chalk2.default.yellow('jsdoc successfully installed.'));
+
+          case 37:
+
             console.log('');
             console.log('' + _chalk2.default.yellow('==> Downloading and installing remark-cli and remark-lint...'));
 
-            _context6.next = 40;
+            _context6.next = 41;
             return tryLogCommand('npm i remark-cli remark-lint');
 
-          case 40:
+          case 41:
 
             console.log('' + _chalk2.default.yellow('remark-lint and remark-cli successfully installed.'));
             console.log('');
             console.log('' + _chalk2.default.yellow('==> Downloading and installing npm-run-all...'));
 
-            _context6.next = 45;
+            _context6.next = 46;
             return tryLogCommand('npm i npm-run-all');
 
-          case 45:
+          case 46:
 
             console.log('' + _chalk2.default.yellow('npm-run-all successfully installed.'));
 
             console.log('');
             console.log('' + _chalk2.default.yellow('==> Downloading and installing serve...'));
 
-            _context6.next = 50;
+            _context6.next = 51;
             return tryLogCommand('npm i -D serve && npm i -g serve');
 
-          case 50:
+          case 51:
 
             console.log('' + _chalk2.default.yellow('serve successfully installed.'));
 
             console.log('');
             console.log('' + _chalk2.default.yellow('==> Copying template files...'));
 
-            _context6.next = 55;
+            _context6.next = 56;
             return copyFiles(pkgPath);
 
-          case 55:
+          case 56:
 
             console.log('');
             console.log('' + _chalk2.default.green('Successfully installed project docs template!'));
 
-          case 57:
+          case 58:
           case 'end':
             return _context6.stop();
         }
@@ -480,7 +510,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @const
  * @type {String}
  */
-var version = '1.0.6';
+var version = '1.0.8';
 
 /**
  * Pass the commandline arguments through argparse module.
@@ -506,22 +536,16 @@ parser.addArgument(['-p', '--package'], {
   dest: 'packagePath',
   metavar: '<PATH>'
 });
-parser.addArgument(['-s', '--serve'], {
-  help: 'Serve your documentation after setup',
-  action: 'storeTrue',
-  defaultValue: false,
-  dest: 'serveDocs'
-});
 parser.addArgument(['--no-code'], {
   help: 'If true will not set up code docs with jsdoc',
-  action: 'storeTrue',
-  defaultValue: false,
+  action: 'storeFalse',
+  defaultValue: true,
   dest: 'codeDocs'
 });
 parser.addArgument(['--no-react'], {
   help: 'If true will not set up react component style guide',
-  action: 'storeTrue',
-  defaultValue: false,
+  action: 'storeFalse',
+  defaultValue: true,
   dest: 'reactDocs'
 });;;;;;
 

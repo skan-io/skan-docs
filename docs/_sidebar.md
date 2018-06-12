@@ -1,13 +1,14 @@
 * Getting started
 
   * [Quick start](quickstart.md)
-  * [Deploy](github-pages.md)
+  * [Deploy](deploy.md)
   * [More pages](more-pages.md)
 
 * Customization
 
-  * [Configuration](configuration.md)
-  * [Themes](themes.md)
+  * [Docsify Config](config.md)
+  * [Custom Navbar](custom-nav.md)
+  * [Coverpage](coverpage.md)
 
 * Code
 
@@ -19,7 +20,7 @@
 
 * Guides
 
-  * [Documenting Code Correctly](code-docs-info.md)
+  * [Docs with JSDoc](code-docs-info.md)
   * [Styling React Components](code-docs-info.md)
 
 * [Changelog](changelog.md)

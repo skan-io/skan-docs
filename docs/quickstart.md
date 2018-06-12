@@ -21,15 +21,15 @@ skan-docs -v
 
 ## Command line arguments
 
-> **-p , --package**    _Path to package.json_
+> **-p , --package**   _Path to package.json_
 >
 > **--no-react**       _Don't include react component docs_
 >
 > **--no-code**        _Don't include code docs_
 >
-> **-v**                _Version_
+> **-v**               _Version_
 >
-> **-h**                _Help_
+> **-h**               _Help_
 
 ```bash
 skan-docs --package 'path/to/package.json' --serve

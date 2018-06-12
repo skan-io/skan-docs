@@ -10,6 +10,10 @@
  * skan-convert -p ./out -o ./docs
  */
 
+var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
 var _fs = require('fs');
 
 var _fs2 = _interopRequireDefault(_fs);
@@ -38,10 +42,19 @@ String.prototype.splice = function (start, delCount, newSubStr) {
 
 /**
  * 'skan-convert' binary version.
+ *
  * @const
  * @type {String}
  */
-var version = '1.0.6';
+var version = '1.0.9';
+
+/**
+ * List of files to be maintained.
+ *
+ * @const
+ * @type {Array}
+ */
+var manifestFiles = [];
 
 /**
  * Pass the commandline arguments through argparse module.
@@ -75,7 +88,7 @@ parser.addArgument(['-o', '--output'], {
 });
 
 var excludedExtensions = new Set(['css', 'scss', 'sass', 'json']);
-var standardFiles = new Set(['_coverpage.md', '_navbar.md', '_sidebar.md', '.nojekyll', 'github-pages.md', 'index.html', 'quickstart.md', 'README.md', 'skan.png', 'jsdoc.json']);
+var standardFiles = new Set(['_coverpage.md', '_navbar.md', '_sidebar.md', '.nojekyll', 'index.html', 'quickstart.md', 'README.md', 'skan.png', 'config.md', 'deploy.md', 'coverpage.md', 'custom-nav.md', 'more-pages.md', 'configuration.md', 'manifest.json']);
 
 /**
  * Given a string find all indices where the search string is located.
@@ -171,6 +184,50 @@ var updateHrefs = function updateHrefs(content) {
 };
 
 /**
+ * Given an output directory and filename, write the passed content
+ * to that file and add the filename to the manifest.json
+ *
+ * @param  {String} outdir  Path of output directory
+ * @param  {String} filename  Name of file to be written
+ * @param  {String} content File content as string
+ * @return {Void}         Content written to file and filename added to manifest.json
+ */
+var writeFileAndManifest = function writeFileAndManifest(outdir, filename, content, files) {
+  _fs2.default.access(outdir, _fs2.default.constants.F_OK, function (err) {
+    console.log('' + (err ? 'docs directory does not exist' : 'internal docs folder exists'));
+
+    if (!err) {
+      if (filename === 'index.html') {
+        filename = 'code_index.html';
+      } else if (filename.includes('.js.html')) {
+        filename = filename.replace('.js.html', '.js.md');
+      }
+
+      if (standardFiles.has(filename)) {
+        onError('Cannot override standard file names');
+        return;
+      }
+
+      _fs2.default.writeFile(_path4.default.join(outdir, filename), content, { encoding: 'utf-8' }, function (err) {
+        if (err) throw err;
+        console.log('The file has been saved!');
+
+        manifestFiles.push(filename);
+
+        var manifest = {
+          files: manifestFiles
+        };
+
+        _fs2.default.writeFile(_path4.default.join(outdir, 'manifest.json'), JSON.stringify(manifest), { encoding: 'utf-8' }, function (err) {
+          if (err) throw err;
+          console.log('The manifest has been saved!');
+        });
+      });
+    }
+  });
+};
+
+/**
  * Given a filename and dirname OR out directory, write the content
  * to the resolved file on that path
  *
@@ -181,52 +238,18 @@ var updateHrefs = function updateHrefs(content) {
  * @return {Void}
  */
 var writeContentToDocs = function writeContentToDocs(filename, content, dirname, outdir) {
+  var docsPath = _path4.default.join(dirname, 'docs');
+  var dir = outdir ? outdir : dirname;
+  var manifestDir = '' + _path4.default.join(process.cwd(), _path4.default.join(outdir ? outdir : docsPath, 'manifest.json'));
+  var relativeManifestDir = _path4.default.relative(__dirname, manifestDir);
+  var manifest = require(relativeManifestDir);
+  var files = manifest.files;
+
   if (!outdir) {
-    var docsPath = _path4.default.join(dirname, 'docs');
-    // Check if the file exists in the current directory.
-    _fs2.default.access(docsPath, _fs2.default.constants.F_OK, function (err) {
-      console.log('' + (err ? 'docs directory does not exist' : 'internal docs folder exists'));
-
-      if (!err) {
-        if (filename === 'index.html') {
-          filename = 'code_index.html';
-        } else if (filename.includes('.js.html')) {
-          filename = filename.replace('.js.html', '.js.md');
-        }
-
-        if (standardFiles.has(filename)) {
-          onError('Cannot override standard file names');
-          return;
-        }
-
-        _fs2.default.writeFile(_path4.default.join(docsPath, filename), content, { encoding: 'utf-8' }, function (err) {
-          if (err) throw err;
-          console.log('The file has been saved!');
-        });
-      }
-    });
+    var _docsPath = _path4.default.join(dirname, 'docs');
+    writeFileAndManifest(_docsPath, filename, content, files);
   } else {
-    _fs2.default.access(outdir, _fs2.default.constants.F_OK, function (err) {
-      console.log('' + (err ? 'docs directory does not exist' : 'internal docs folder exists'));
-
-      if (!err) {
-        if (filename === 'index.html') {
-          filename = 'code_index.html';
-        } else if (filename.includes('.js.html')) {
-          filename = filename.replace('.js.html', '.js.md');
-        }
-
-        if (standardFiles.has(filename)) {
-          onError('Cannot override standard file names');
-          return;
-        }
-
-        _fs2.default.writeFile(_path4.default.join(outdir, filename), content, { encoding: 'utf-8' }, function (err) {
-          if (err) throw err;
-          console.log('The file has been saved!');
-        });
-      }
-    });
+    writeFileAndManifest(outdir, filename, content, files);
   }
 };
 
@@ -319,26 +342,30 @@ var readFiles = function readFiles(dirname, onFileContent, onError, outdir) {
 
 /**
  * Remove any doc files from the supplied output directory or the
- * docs directory which are not in the standardFiles set
+ * docs directory which are not in the standardFiles set or are on
+ * the manifest.json, then clear the manifest.json.
  *
  * @param  {String} dirname Path to source file directory
  * @param  {String} outdir  Path to output directory
  * @param  {Function} onError Callback function to handle errors
  * @return {Void}
  */
-var cleanDocs = function cleanDocs(dirname, outdir, onError) {
+var cleanDocs = function cleanDocs(dirname, outdir, onError, files) {
   var docsPath = _path4.default.join(dirname, 'docs');
+  var dir = outdir ? outdir : dirname;
 
-  _fs2.default.readdir(outdir ? outdir : dirname, function (err, filenames) {
+  _fs2.default.readdir(dir, function (err, filenames) {
     if (err) {
       onError(err);
       return;
     }
     filenames.forEach(function (filename) {
-      var file = _path4.default.join(outdir ? outdir : docsPath, filename);
+      if (!files.has(filename)) {
+        var file = _path4.default.join(outdir ? outdir : docsPath, filename);
 
-      if (_fs2.default.lstatSync(file).isFile() && !standardFiles.has(filename)) {
-        _fs2.default.unlink(file);
+        if (_fs2.default.lstatSync(file).isFile() && !standardFiles.has(filename)) {
+          _fs2.default.unlink(file);
+        }
       }
     });
   });
@@ -354,12 +381,20 @@ function main() {
       outdir = args.outdir;
 
 
-  cleanDocs(dirname, outdir, onError);
+  var docsPath = _path4.default.join(dirname, 'docs');
+  var dir = outdir ? outdir : dirname;
+
+  var manifestDir = '' + _path4.default.join(process.cwd(), _path4.default.join(outdir ? outdir : docsPath, 'manifest.json'));
+  var relativeManifestDir = _path4.default.relative(__dirname, manifestDir);
+  var manifest = require(relativeManifestDir);
+  var files = new Set([].concat((0, _toConsumableArray3.default)(manifest.files)));
+
+  cleanDocs(dirname, outdir, onError, files);
 
   if (dirname) {
-    readFiles(dirname, onFileContent, onError, outdir);
+    readFiles(dirname, onFileContent, onError, outdir, files);
   } else {
-    readFiles('.', onFileContent, onError, outdir);
+    readFiles('.', onFileContent, onError, outdir, files);
   }
 
   return;

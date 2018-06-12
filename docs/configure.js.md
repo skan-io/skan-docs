@@ -30,7 +30,7 @@ import copy from 'copy';
  * @const
  * @type {String}
  */
-const version = '1.0.0';
+const version = '1.0.8';
 
 
 /**
@@ -64,20 +64,11 @@ parser.addArgument(
   }
 );
 parser.addArgument(
-  ['-s', '--serve'],
-  {
-    help: 'Serve your documentation after setup',
-    action: 'storeTrue',
-    defaultValue: false,
-    dest: 'serveDocs'
-  }
-);
-parser.addArgument(
   ['--no-code'],
   {
     help: 'If true will not set up code docs with jsdoc',
-    action: 'storeTrue',
-    defaultValue: false,
+    action: 'storeFalse',
+    defaultValue: true,
     dest: 'codeDocs'
   }
 );
@@ -85,8 +76,8 @@ parser.addArgument(
   ['--no-react'],
   {
     help: 'If true will not set up react component style guide',
-    action: 'storeTrue',
-    defaultValue: false,
+    action: 'storeFalse',
+    defaultValue: true,
     dest: 'reactDocs'
   }
 );
@@ -152,7 +143,6 @@ async function printHeadingAndArt() {
   });
 };
 
-
 /**
  * Add script commands to the passed package json object.
  *
@@ -160,7 +150,16 @@ async function printHeadingAndArt() {
  * @param  {String} path Path to write updated package.json out to
  * @return {Promise}     Promise, when resolved has updated package.json
  */
-async function updatePackageJson(pkg, path) {
+
+/**
+ * Add script commands to the passed package json object.
+ * @param  {Object} pkg  { package.json }
+ * @param  {String} path Path to write updated package.json out to
+ * @param  {Boolean} codeDocs  True if include code docs scripts
+ * @param  {Boolean} reactDocs True if include react style guide scripts
+ * @return {Promise}     Promise, when resolved has updated package.json
+ */
+async function updatePackageJson(pkg, path, codeDocs, reactDocs) {
   return new Promise(function (resolve, reject) {
     try {
       if (!pkg.scripts) {
@@ -169,14 +168,27 @@ async function updatePackageJson(pkg, path) {
       console.log('');
       console.log(`${chalk.yellow('Adding docs and lint scripts to package.json.')}`);
 
-      pkg.scripts['docs'] = 'run-s -s docs:code docs:proj';
-      pkg.scripts['docs:code'] = 'runs-s docs:clear docs:build docs:clear';
-      pkg.scripts['docs:proj'] = 'docsify serve docs';
-      pkg.scripts['docs:clear'] = 'rm -rf ./out/';
-      pkg.scripts['docs:build'] = 'jsdoc ./src &amp;&amp; ./node_modules/skan-docs/bin/skan-convert -p ./out -o ./docs';
-      pkg.scripts['lint'] = 'run-s -s lint:*';
-      pkg.scripts['lint:md'] = 'remark -i .gitignore --no-stdout --use remark-lint *.md';
-      pkg.scripts['lint:docs'] = 'remark -i .gitignore /docs --no-stdout --use remark-lint docs/*.md';
+      if (codeDocs &amp;&amp; reactDocs) {
+        pkg.scripts['docs'] = 'run-s -s docs:code docs:proj';
+        pkg.scripts['docs:code'] = 'run-s docs:clear docs:build docs:clear';
+        pkg.scripts['docs:proj'] = 'docsify serve docs';
+        pkg.scripts['docs:clear'] = 'rm -rf ./out/';
+        pkg.scripts['docs:build'] = 'jsdoc ./src || exit 0 &amp;&amp; skan-convert -p ./out -o ./docs || exit 0';
+        pkg.scripts['lint'] = 'run-s -s lint:*';
+        pkg.scripts['lint:md'] = 'remark -i .gitignore --no-stdout --use remark-lint *.md';
+        pkg.scripts['lint:docs'] = 'remark -i .gitignore /docs --no-stdout --use remark-lint docs/*.md';
+
+        // TODO add react style guide scripts
+
+      } else if (!codeDocs) {
+        pkg.scripts['docs'] = 'run-s -s docs:proj';
+        pkg.scripts['docs:proj'] = 'docsify serve docs';
+        pkg.scripts['lint'] = 'run-s -s lint:*';
+        pkg.scripts['lint:md'] = 'remark -i .gitignore --no-stdout --use remark-lint *.md';
+        pkg.scripts['lint:docs'] = 'remark -i .gitignore /docs --no-stdout --use remark-lint docs/*.md';
+
+        // TODO add react style guide scripts
+      }
 
       fs.writeFile(path, JSON.stringify(pkg, null, 2), (err)=> {
         if (err) {
@@ -203,17 +215,14 @@ async function updatePackageJson(pkg, path) {
  * @return {Void}             Templated files copied to docs directory
  */
 async function copyFiles(packagePath) {
-  const docsPath = path.join(packagePath, 'docs');
-  const templatePath = path.join(__dirname, 'templates/');
+  const docsPath = path.join(path.dirname(packagePath), 'docs');
+  const templatePath = path.join(__dirname, 'templates/*.*');
 
-  console.log(__dirname, docsPath, templatePath);
-  // copy(templatePath, docsPath, (err, files)=> {
-  //   if (err) {
-  //     console.log(err);
-  //   } else {
-  //     console.log({files});
-  //   }
-  // });
+  copy(templatePath, docsPath, (err, files)=> {
+    if (err) {
+      console.log(err);
+    }
+  });
 }
 
 
@@ -226,11 +235,13 @@ async function copyFiles(packagePath) {
 async function main() {
   const args = parser.parseArgs(process.argv.slice(2));
 
-  const {packagePath, serveDocs, codeDocs, reactDocs} = args;
+  const {packagePath, codeDocs, reactDocs} = args;
 
   const pkgPath = packagePath === null
     ? path.resolve('.', 'package.json')
     : path.resolve(packagePath, 'package.json');
+
+  console.log({pkgPath});
 
   let pkgJson = null;
 
@@ -246,17 +257,32 @@ async function main() {
   console.log('');
   console.log(`${chalk.yellow('Welcome to Skan.io doctool.')}`);
   console.log('');
+  console.log(`${chalk.yellow('==> Updating package.json scripts...')}`);
+
+  await updatePackageJson(pkgJson, pkgPath, codeDocs, reactDocs);
+
+  console.log('');
   console.log(`${chalk.yellow('==> Downloading and installing docsify-cli...')}`);
 
   await tryLogCommand('npm i -g docsify-cli &amp;&amp; npm i -D docsify-cli');
 
   console.log(`${chalk.yellow('docsify-cli successfully installed.')}`);
-  console.log('');
-  console.log(`${chalk.yellow('==> Downloading and installing jsdoc and jsdoc-babel')}`);
 
-  await tryLogCommand('npm i -g jsdoc jsdoc-babel &amp;&amp; npm i -D jsdoc jsdoc-babel');
+  if (codeDocs) {
+    console.log('');
+    console.log(`${chalk.yellow('==> Downloading and installing babel-core and babel-cli')}`);
 
-  console.log(`${chalk.yellow('jsdoc-to-markdown successfully installed.')}`);
+    await tryLogCommand('npm i babel-core babel-cli');
+
+    console.log(`${chalk.yellow('babel successfully installed.')}`);
+    console.log('');
+    console.log(`${chalk.yellow('==> Downloading and installing jsdoc and jsdoc-babel')}`);
+
+    await tryLogCommand('npm i -g jsdoc jsdoc-babel &amp;&amp; npm i -D jsdoc jsdoc-babel');
+
+    console.log(`${chalk.yellow('jsdoc successfully installed.')}`);
+  }
+
   console.log('');
   console.log(`${chalk.yellow('==> Downloading and installing remark-cli and remark-lint...')}`);
 
@@ -271,11 +297,6 @@ async function main() {
   console.log(`${chalk.yellow('npm-run-all successfully installed.')}`);
 
   console.log('');
-  console.log(`${chalk.yellow('==> Updating package.json scripts...')}`);
-
-  await updatePackageJson(pkgJson, pkgPath);
-
-  console.log('');
   console.log(`${chalk.yellow('==> Downloading and installing serve...')}`);
 
   await tryLogCommand('npm i -D serve &amp;&amp; npm i -g serve');
@@ -285,7 +306,7 @@ async function main() {
   console.log('');
   console.log(`${chalk.yellow('==> Copying template files...')}`);
 
-  await copyFiles(packagePath);
+  await copyFiles(pkgPath);
 
   console.log('');
   console.log(`${chalk.green('Successfully installed project docs template!')}`);

@@ -1,6 +1,6 @@
 {
   "name": "skan-docs",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "A example of project docs using docsify, and a tool to automate implementing project docs.",
   "main": "src/configure.js",
   "bin": {
