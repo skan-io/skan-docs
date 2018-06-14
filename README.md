@@ -7,7 +7,7 @@
 <a><img src="https://img.shields.io/npm/v/npm.svg?style=flat-square" alt="Coverage Status"></a>
 <a><img src="https://img.shields.io/badge/linter-eslint-ff69b4.svg?style=flat-square" alt="code style: prettier"></a>
 <a><img src="https://img.shields.io/badge/skan-docs-orange.svg?style=flat-square"></a>
-<a><img src="https://img.shields.io/badge/docs-v1.0.9-lightgrey.svg?style=flat-square"></a>
+<a><img src="https://img.shields.io/badge/docs-v1.1.0-lightgrey.svg?style=flat-square"></a>
 
 ## Background
 

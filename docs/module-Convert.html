@@ -142,6 +142,78 @@ skan-convert -p ./out -o ./docs</code></pre>
 
         
             
+<h4 class="name" id="~manifestFiles"><span class="type-signature">(inner, constant) </span>manifestFiles<span class="type-signature"> :Array</span></h4>
+
+
+
+
+<div class="description">
+    List of files to be maintained.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Array</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="#/convert.js.md">convert.js</a>, <a href="#/convert.js.md#line49">line 49</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
 <h4 class="name" id="~parser"><span class="type-signature">(inner, constant) </span>parser<span class="type-signature"> :ArgumentParser</span></h4>
 
 
@@ -196,7 +268,7 @@ skan-convert -p ./out -o ./docs</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="#/convert.js.md">convert.js</a>, <a href="#/convert.js.md#line48">line 48</a>
+        <a href="#/convert.js.md">convert.js</a>, <a href="#/convert.js.md#line58">line 58</a>
     </li></ul></dd>
     
 
@@ -268,7 +340,7 @@ skan-convert -p ./out -o ./docs</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="#/convert.js.md">convert.js</a>, <a href="#/convert.js.md#line39">line 39</a>
+        <a href="#/convert.js.md">convert.js</a>, <a href="#/convert.js.md#line40">line 40</a>
     </li></ul></dd>
     
 
@@ -305,7 +377,8 @@ skan-convert -p ./out -o ./docs</code></pre>
 
 <div class="description">
     Remove any doc files from the supplied output directory or the
-docs directory which are not in the standardFiles set
+docs directory which are not in the standardFiles set or are on
+the manifest.json, then clear the manifest.json.
 </div>
 
 
@@ -444,7 +517,7 @@ docs directory which are not in the standardFiles set
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="#/convert.js.md">convert.js</a>, <a href="#/convert.js.md#line348">line 348</a>
+        <a href="#/convert.js.md">convert.js</a>, <a href="#/convert.js.md#line377">line 377</a>
     </li></ul></dd>
     
 
@@ -621,7 +694,7 @@ the filename suggests this file is a code block
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="#/convert.js.md">convert.js</a>, <a href="#/convert.js.md#line256">line 256</a>
+        <a href="#/convert.js.md">convert.js</a>, <a href="#/convert.js.md#line284">line 284</a>
     </li></ul></dd>
     
 
@@ -825,7 +898,7 @@ the filename suggests this file is a code block
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="#/convert.js.md">convert.js</a>, <a href="#/convert.js.md#line100">line 100</a>
+        <a href="#/convert.js.md">convert.js</a>, <a href="#/convert.js.md#line112">line 112</a>
     </li></ul></dd>
     
 
@@ -1030,7 +1103,7 @@ from the previous index
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="#/convert.js.md">convert.js</a>, <a href="#/convert.js.md#line130">line 130</a>
+        <a href="#/convert.js.md">convert.js</a>, <a href="#/convert.js.md#line142">line 142</a>
     </li></ul></dd>
     
 
@@ -1138,7 +1211,7 @@ from the previous index
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="#/convert.js.md">convert.js</a>, <a href="#/convert.js.md#line371">line 371</a>
+        <a href="#/convert.js.md">convert.js</a>, <a href="#/convert.js.md#line403">line 403</a>
     </li></ul></dd>
     
 
@@ -1362,7 +1435,7 @@ directory
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="#/convert.js.md">convert.js</a>, <a href="#/convert.js.md#line317">line 317</a>
+        <a href="#/convert.js.md">convert.js</a>, <a href="#/convert.js.md#line345">line 345</a>
     </li></ul></dd>
     
 
@@ -1516,7 +1589,7 @@ with appropriate path for docsify
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="#/convert.js.md">convert.js</a>, <a href="#/convert.js.md#line146">line 146</a>
+        <a href="#/convert.js.md">convert.js</a>, <a href="#/convert.js.md#line158">line 158</a>
     </li></ul></dd>
     
 
@@ -1744,7 +1817,7 @@ to the resolved file on that path
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="#/convert.js.md">convert.js</a>, <a href="#/convert.js.md#line197">line 197</a>
+        <a href="#/convert.js.md">convert.js</a>, <a href="#/convert.js.md#line254">line 254</a>
     </li></ul></dd>
     
 
@@ -1770,6 +1843,210 @@ to the resolved file on that path
 <h5>Returns:</h5>
 
         
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Void</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~writeFileAndManifest"><span class="type-signature">(inner) </span>writeFileAndManifest<span class="signature">(outdir, filename, content)</span><span class="type-signature"> &rarr; {Void}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Given an output directory and filename, write the passed content
+to that file and add the filename to the manifest.json
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>outdir</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Path of output directory</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>filename</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Name of file to be written</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>content</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">File content as string</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="#/convert.js.md">convert.js</a>, <a href="#/convert.js.md#line208">line 208</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Content written to file and filename added to manifest.json
+</div>
+
 
 
 <dl>
@@ -1842,7 +2119,7 @@ to the resolved file on that path
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="#/convert.js.md">convert.js</a>, <a href="#/convert.js.md#line301">line 301</a>
+        <a href="#/convert.js.md">convert.js</a>, <a href="#/convert.js.md#line329">line 329</a>
     </li></ul></dd>
     
 
@@ -1904,7 +2181,7 @@ to the resolved file on that path
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="#/convert.js.md">convert.js</a>, <a href="#/convert.js.md#line283">line 283</a>
+        <a href="#/convert.js.md">convert.js</a>, <a href="#/convert.js.md#line311">line 311</a>
     </li></ul></dd>
     
 
@@ -1940,7 +2217,7 @@ to the resolved file on that path
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="#/https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Jun 11 2018 14:46:09 GMT+1000 (AEST)
+    Documentation generated by <a href="#/https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Jun 14 2018 18:25:25 GMT+1000 (AEST)
 </footer>
 
 <script> prettyPrint(); </script>

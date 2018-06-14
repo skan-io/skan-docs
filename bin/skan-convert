@@ -46,7 +46,7 @@ String.prototype.splice = function (start, delCount, newSubStr) {
  * @const
  * @type {String}
  */
-var version = '1.0.9';
+var version = '1.1.0';
 
 /**
  * List of files to be maintained.
@@ -360,7 +360,7 @@ var cleanDocs = function cleanDocs(dirname, outdir, onError, files) {
       return;
     }
     filenames.forEach(function (filename) {
-      if (!files.has(filename)) {
+      if (files.has(filename)) {
         var file = _path4.default.join(outdir ? outdir : docsPath, filename);
 
         if (_fs2.default.lstatSync(file).isFile() && !standardFiles.has(filename)) {

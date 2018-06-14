@@ -510,7 +510,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @const
  * @type {String}
  */
-var version = '1.0.8';
+var version = '1.1.0';
 
 /**
  * Pass the commandline arguments through argparse module.

@@ -37,10 +37,20 @@ String.prototype.splice = function(start, delCount, newSubStr) {
 
 /**
  * 'skan-convert' binary version.
+ *
  * @const
  * @type {String}
  */
-const version = '1.0.8';
+const version = '1.1.0';
+
+
+/**
+ * List of files to be maintained.
+ *
+ * @const
+ * @type {Array}
+ */
+const manifestFiles = [];
 
 
 /**
@@ -87,8 +97,10 @@ parser.addArgument(
 const excludedExtensions = new Set(['css', 'scss', 'sass', 'json']);
 const standardFiles = new Set([
   '_coverpage.md', '_navbar.md', '_sidebar.md',
-  '.nojekyll', 'github-pages.md', 'index.html', 'quickstart.md',
-  'README.md', 'skan.png', 'jsdoc.json'
+  '.nojekyll', 'index.html', 'quickstart.md',
+  'README.md', 'skan.png', 'config.md', 'deploy.md',
+  'coverpage.md', 'custom-nav.md', 'more-pages.md',
+  'configuration.md', 'manifest.json'
 ]);
 
 
@@ -189,6 +201,51 @@ const updateHrefs = (content)=> {
 
 
 /**
+ * Given an output directory and filename, write the passed content
+ * to that file and add the filename to the manifest.json
+ *
+ * @param  {String} outdir  Path of output directory
+ * @param  {String} filename  Name of file to be written
+ * @param  {String} content File content as string
+ * @return {Void}         Content written to file and filename added to manifest.json
+ */
+const writeFileAndManifest = (outdir, filename, content, files)=> {
+  fs.access(outdir, fs.constants.F_OK, (err)=> {
+    console.log(`${err ? 'docs directory does not exist' : 'internal docs folder exists'}`);
+
+    if (!err) {
+      if (filename === 'index.html') {
+        filename = 'code_index.html';
+      } else if (filename.includes('.js.html')) {
+        filename = filename.replace('.js.html', '.js.md');
+      }
+
+      if (standardFiles.has(filename)) {
+        onError('Cannot override standard file names');
+        return;
+      }
+
+      fs.writeFile(path.join(outdir, filename), content, {encoding: 'utf-8'}, (err)=> {
+        if (err) throw err;
+        console.log('The file has been saved!');
+
+        manifestFiles.push(filename);
+
+        const manifest = {
+          files: manifestFiles
+        };
+
+        fs.writeFile(path.join(outdir, 'manifest.json'), JSON.stringify(manifest), {encoding: 'utf-8'}, (err)=> {
+          if (err) throw err;
+          console.log('The manifest has been saved!');
+        });
+      });
+    }
+  });
+}
+
+
+/**
  * Given a filename and dirname OR out directory, write the content
  * to the resolved file on that path
  *
@@ -199,52 +256,23 @@ const updateHrefs = (content)=> {
  * @return {Void}
  */
 const writeContentToDocs = (filename, content, dirname, outdir)=> {
+  const docsPath = path.join(dirname, 'docs');
+  const dir = outdir ? outdir : dirname;
+  const manifestDir = `${
+    path.join(
+      process.cwd(),
+      path.join(outdir ? outdir : docsPath, 'manifest.json')
+    )
+  }`;
+  const relativeManifestDir = path.relative(__dirname, manifestDir);
+  const manifest = require(relativeManifestDir);
+  const files = manifest.files;
+
   if (!outdir) {
     const docsPath = path.join(dirname, 'docs');
-    // Check if the file exists in the current directory.
-    fs.access(docsPath, fs.constants.F_OK, (err)=> {
-      console.log(`${err ? 'docs directory does not exist' : 'internal docs folder exists'}`);
-
-      if (!err) {
-        if (filename === 'index.html') {
-          filename = 'code_index.html';
-        } else if (filename.includes('.js.html')) {
-          filename = filename.replace('.js.html', '.js.md');
-        }
-
-        if (standardFiles.has(filename)) {
-          onError('Cannot override standard file names');
-          return;
-        }
-
-        fs.writeFile(path.join(docsPath, filename), content, {encoding: 'utf-8'}, (err)=> {
-          if (err) throw err;
-          console.log('The file has been saved!');
-        });
-      }
-    });
+    writeFileAndManifest(docsPath, filename, content, files);
   } else {
-    fs.access(outdir, fs.constants.F_OK, (err)=> {
-      console.log(`${err ? 'docs directory does not exist' : 'internal docs folder exists'}`);
-
-      if (!err) {
-        if (filename === 'index.html') {
-          filename = 'code_index.html';
-        } else if (filename.includes('.js.html')) {
-          filename = filename.replace('.js.html', '.js.md');
-        }
-
-        if (standardFiles.has(filename)) {
-          onError('Cannot override standard file names');
-          return;
-        }
-
-        fs.writeFile(path.join(outdir, filename), content, {encoding: 'utf-8'}, (err)=> {
-          if (err) throw err;
-          console.log('The file has been saved!');
-        });
-      }
-    });
+    writeFileAndManifest(outdir, filename, content, files);
   }
 };
 
@@ -342,26 +370,30 @@ const readFiles = (dirname, onFileContent, onError, outdir)=> {
 
 /**
  * Remove any doc files from the supplied output directory or the
- * docs directory which are not in the standardFiles set
+ * docs directory which are not in the standardFiles set or are on
+ * the manifest.json, then clear the manifest.json.
  *
  * @param  {String} dirname Path to source file directory
  * @param  {String} outdir  Path to output directory
  * @param  {Function} onError Callback function to handle errors
  * @return {Void}
  */
-const cleanDocs = (dirname, outdir, onError)=> {
+const cleanDocs = (dirname, outdir, onError, files)=> {
   const docsPath = path.join(dirname, 'docs');
+  const dir = outdir ? outdir : dirname;
 
-  fs.readdir(outdir ? outdir : dirname, (err, filenames)=> {
+  fs.readdir(dir, (err, filenames)=> {
     if (err) {
       onError(err);
       return;
     }
     filenames.forEach((filename)=> {
-      const file = path.join(outdir ? outdir : docsPath, filename);
+      if (files.has(filename)) {
+        const file = path.join(outdir ? outdir : docsPath, filename);
 
-      if (fs.lstatSync(file).isFile() &amp;&amp; !standardFiles.has(filename)) {
-        fs.unlink(file);
+        if (fs.lstatSync(file).isFile() &amp;&amp; !standardFiles.has(filename)) {
+          fs.unlink(file);
+        }
       }
     });
   });
@@ -376,12 +408,25 @@ function main() {
   const args = parser.parseArgs(process.argv.slice(2));
   const {dirname, outdir} = args;
 
-  cleanDocs(dirname, outdir, onError);
+  const docsPath = path.join(dirname, 'docs');
+  const dir = outdir ? outdir : dirname;
+
+  const manifestDir = `${
+    path.join(
+      process.cwd(),
+      path.join(outdir ? outdir : docsPath, 'manifest.json')
+    )
+  }`;
+  const relativeManifestDir = path.relative(__dirname, manifestDir);
+  const manifest = require(relativeManifestDir);
+  const files = new Set([...manifest.files]);
+
+  cleanDocs(dirname, outdir, onError, files);
 
   if (dirname) {
-    readFiles(dirname, onFileContent, onError, outdir);
+    readFiles(dirname, onFileContent, onError, outdir, files);
   } else {
-    readFiles('.', onFileContent, onError, outdir);
+    readFiles('.', onFileContent, onError, outdir, files);
   }
 
   return;
